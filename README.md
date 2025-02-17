@@ -16,6 +16,7 @@ Contributions and improvements are always welcome! 🚀
 
 Each plugin should follow a consistent folder structure. Below is an example based on Figma plugins:
 
+```plaintext
 plugin-name/
 ├── manifest.json  # Plugin metadata (name, ID, API permissions, etc.)
 ├── code.ts        # Main script (can be JavaScript or TypeScript)
@@ -24,10 +25,8 @@ plugin-name/
 └── README.md      # Documentation for usage and setup
 
 
-### Submitting a Plugin
-
-1. Ensure your plugin follows the folder structure above.  
-2. Include a `README.md` explaining what the plugin does and how to use it.  
-3. Remove any private company information (e.g., API keys, secret keys).  
-4. Open a pull request with your plugin in its own folder inside the repository.  
-
+Submitting a Plugin using this repository 
+	1.	Ensure your plugin follows the folder structure above.
+	2.	Include a README.md explaining what the plugin does and how to use it.
+	3.	Remove any private company information (e.g., API keys, secret keys).
+	4.	Open a pull request with your plugin in its own folder inside the repository.
