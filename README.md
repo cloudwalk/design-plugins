@@ -9,6 +9,5 @@ Please follow these rules. Plugins that do not comply will be deleted:
 - **No plugin should contain or expose private company information**, such as API keys, secret keys, or internal data.
 - Follow best practices for code quality and security.
 - Ensure proper documentation for each plugin.
-- Keep dependencies up to date and compatible with our workflow.
 
 Contributions and improvements are always welcome! 🚀
