@@ -1,0 +1,15 @@
+{
+    "name": "Frame to JSON",
+    "id": "1471916153295654451",
+    "api": "1.0.0",
+    "main": "code.js",
+    "ui": "ui.html",
+    "capabilities": [],
+    "enableProposedApi": false,
+    "editorType": ["figma"],
+    "networkAccess": {
+        "allowedDomains": ["none"],
+        "reasoning": "This plugin only performs local frame to JSON conversion and doesn't require network access."
+    },
+    "documentAccess": "dynamic-page"
+}
