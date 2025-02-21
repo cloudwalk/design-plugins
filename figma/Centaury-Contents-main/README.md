@@ -24,8 +24,6 @@ Centaury Contents is an innovative open-source Figma plugin that revolutionizes 
   > 📺 [Assista ao vídeo completo da demonstração](https://drive.google.com/file/d/1_wl5ZbCnhLut4YhBrNj6VplaKkm7XfHU/view?usp=sharing)
 </div>
 
-**Nota**: O vídeo completo da demonstração está disponível no Google Drive. Para desenvolvedores, você pode baixar o vídeo e colocá-lo na pasta `assets` com o nome `demo.mov` para testes locais.
-
 ## ✨ Key Features
 
 ### 📝 Content Management
