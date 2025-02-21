@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Schema Generator Assistant",
+  "version": "1.0",
+  "description": "Generate appropriate schemas for web pages through interactive chat",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "ui.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
