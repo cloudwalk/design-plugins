@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" />
+  <style>
+    :root {
+      --primary-color: #1E1E1E;
+      --primary-hover: #2A2A2A;
+      --bg-color: #000000;
+      --text-color: #FFFFFF;
+      --text-secondary: #999999;
+      --border-color: #333333;
+      --input-bg: #1A1A1A;
+      --hover-bg: #262626;
+      --result-box-bg: #1A1A1A;
+      --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius-sm: 4px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+      --border-radius-xl: 100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .header {
+      padding: 40px 40px 20px 40px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+      color: var(--text-color);
+      line-height: 1.2;
+    }
+
+    .description {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .options-container {
+      flex: 1;
+      padding: 0 40px 40px 40px;
+      margin-top: 0;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      background-color: var(--primary-color);
+      margin-bottom: 16px;
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: var(--transition-default);
+      height: 72px;
+    }
+
+    .option-item:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .option-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .material-symbols-rounded {
+      font-size: 24px;
+      color: var(--text-color);
+    }
+
+    .option-text {
+      flex: 1;
+    }
+
+    .option-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 1px;
+      color: var(--text-color);
+    }
+
+    .option-description {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Scrollbar Customization */
+    /* Custom styles for the form screen */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      right: 0;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: var(--border-radius-sm);
+      border: 2px solid var(--bg-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) var(--bg-color);
+    }
+
+    /* Estilos para a tela de formulário */
+    .form-screen {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .form-screen.active {
+      display: flex;
+    }
+
+    .back-button {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin: 40px 16px 32px 40px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+
+    .back-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .back-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 40px 0 32px 0;
+    }
+
+    .back-button:hover {
+      background: var(--primary-color);
+    }
+
+    .back-button .material-symbols-rounded {
+      font-size: 20px;
+    }
+
+    .form-container {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      margin: 0 40px 60px 40px;
+      padding: 40px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-color);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--primary-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      transition: var(--transition-default);
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--text-color);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-secondary);
+    }
+
+    select.input-field {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23999999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    select.input-field optgroup {
+      background: var(--primary-color);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 0;
+    }
+
+    select.input-field option {
+      background: var(--primary-color);
+      color: var(--text-color);
+      font-size: 13px;
+      font-weight: normal;
+      text-transform: none;
+      letter-spacing: 0;
+      padding: 8px 16px;
+    }
+
+    .apply-button {
+      width: 100%;
+      background: var(--text-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 0;
+      min-height: 44px;
+      border-radius: 100px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-default);
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .apply-button:hover {
+      opacity: 0.9;
+    }
+
+    .main-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .main-screen.hidden {
+      display: none;
+    }
+
+    .mode-toggle {
+      margin-bottom: 32px;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .mode-label {
+      font-size: 13px;
+      color: var(--text-color);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--primary-color);
+      border: 1px solid var(--border-color);
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-color);
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .mode-label .material-symbols-rounded {
+      font-size: 20px;
+      color: var(--text-secondary);
+      transition: var(--transition-default);
+    }
+
+    .mode-toggle input:checked ~ .mode-label .material-symbols-rounded {
+      color: var(--text-color);
+    }
+
+    .toggle-container .mode-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px !important;
+      color: var(--text-color);
+      transition: var(--transition-default);
+      z-index: 1;
+    }
+
+    .slider-icon-off {
+      left: 4px;
+      opacity: 1;
+    }
+
+    .slider-icon-on {
+      right: 4px;
+      opacity: 0;
+    }
+
+    input:checked + .slider .slider-icon-off {
+      opacity: 0;
+    }
+
+    input:checked + .slider .slider-icon-on {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-screen" id="main-screen">
+    <div class="header">
+      <h1>Stellar</h1>
+      <div class="description">Create identifiers and connectors to organize your design system documentation.</div>
+    </div>
+    
+    <div class="options-container">
+      <div class="option-item" id="frame-identifier">
+        <div class="option-icon">
+          <span class="material-symbols-rounded">motion_sensor_active</span>
+        </div>
+        <div class="option-text">
+          <div class="option-title">Frame Identifier</div>
+          <div class="option-description">Create a header to identify frames</div>
+        </div>
+      </div>
+
+      <div class="option-item" id="section-identifier">
+        <div class="option-icon">
+          <span class="material-symbols-rounded">screenshot_frame_2</span>
+        </div>
+        <div class="option-text">
+          <div class="option-title">Section Identifier</div>
+          <div class="option-description">Create a header to group frames</div>
+        </div>
+      </div>
+
+      <div class="option-item" id="flow-identifier">
+        <div class="option-icon">
+          <span class="material-symbols-rounded">family_history</span>
+        </div>
+        <div class="option-text">
+          <div class="option-title">Flow Identifier</div>
+          <div class="option-description">Create a header for navigation flows</div>
+        </div>
+      </div>
+
+      <div class="option-item" id="connector-arrows">
+        <div class="option-icon">
+          <span class="material-symbols-rounded">conversion_path</span>
+        </div>
+        <div class="option-text">
+          <div class="option-title">Connector Arrows</div>
+          <div class="option-description">Create arrows to connect frames</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-screen" id="frame-identifier-form">
+    <div class="back-container">
+      <button class="back-button" id="back-button">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+      <div class="back-title">Frame Identifier</div>
+    </div>
+    
+    <div class="form-container">
+      <div class="input-group">
+        <label class="input-label" for="title">Title</label>
+        <input type="text" id="title" class="input-field" placeholder="Enter title">
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label" for="subtitle">Subtitle</label>
+        <input type="text" id="subtitle" class="input-field" placeholder="Enter subtitle">
+      </div>
+      
+      <button class="apply-button" id="apply-button">APPLY</button>
+    </div>
+  </div>
+
+  <div class="form-screen" id="section-identifier-form">
+    <div class="back-container">
+      <button class="back-button" id="back-button-section">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+      <div class="back-title">Section Identifier</div>
+    </div>
+    
+    <div class="form-container">
+      <div class="input-group">
+        <label class="input-label" for="section-status">Status</label>
+        <select id="section-status" class="input-field">
+          <option value="None">None</option>
+          <optgroup label="Planning">
+            <option value="Select a status">Select a status</option>
+            <option value="In progress">⚡ In progress</option>
+            <option value="Highlight">✨ Highlight</option>
+          </optgroup>
+          <optgroup label="Design">
+            <option value="Prototype">🎨 Prototype</option>
+            <option value="Ready for development">🚀 Ready for development</option>
+          </optgroup>
+          <optgroup label="Review">
+            <option value="In review">👀 In review</option>
+            <option value="Test">🧪 Test</option>
+            <option value="Need discussion">💭 Need discussion</option>
+            <option value="Need to understand">❓ Need to understand</option>
+          </optgroup>
+          <optgroup label="Alerts">
+            <option value="On hold">⏸️ On hold</option>
+            <option value="Attention">⚠️ Attention</option>
+            <option value="Dont">🚫 Don't</option>
+          </optgroup>
+          <optgroup label="Completion">
+            <option value="Completed">✅ Completed</option>
+            <option value="In production">🌟 In production</option>
+            <option value="Archived">📦 Archived</option>
+          </optgroup>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label" for="section-title">Title</label>
+        <input type="text" id="section-title" class="input-field" placeholder="Enter section title">
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label" for="section-subtitle">Subtitle</label>
+        <input type="text" id="section-subtitle" class="input-field" placeholder="Enter section subtitle">
+      </div>
+      
+      <button class="apply-button" id="apply-button-section">APPLY</button>
+    </div>
+  </div>
+
+  <div class="form-screen" id="flow-identifier-form">
+    <div class="back-container">
+      <button class="back-button" id="back-button-flow">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+      <div class="back-title">Flow Identifier</div>
+    </div>
+    
+    <div class="form-container">
+      <div class="input-group">
+        <label class="input-label" for="flow-status">Status</label>
+        <select id="flow-status" class="input-field">
+          <option value="None">None</option>
+          <optgroup label="Planning">
+            <option value="Select a status">Select a status</option>
+            <option value="In progress">⚡ In progress</option>
+            <option value="Highlight">✨ Highlight</option>
+          </optgroup>
+          <optgroup label="Design">
+            <option value="Prototype">🎨 Prototype</option>
+            <option value="Ready for development">🚀 Ready for development</option>
+          </optgroup>
+          <optgroup label="Review">
+            <option value="In review">👀 In review</option>
+            <option value="Test">🧪 Test</option>
+            <option value="Need discussion">💭 Need discussion</option>
+            <option value="Need to understand">❓ Need to understand</option>
+          </optgroup>
+          <optgroup label="Alerts">
+            <option value="On hold">⏸️ On hold</option>
+            <option value="Attention">⚠️ Attention</option>
+            <option value="Dont">🚫 Don't</option>
+          </optgroup>
+          <optgroup label="Completion">
+            <option value="Completed">✅ Completed</option>
+            <option value="In production">🌟 In production</option>
+            <option value="Archived">📦 Archived</option>
+          </optgroup>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label" for="flow-title">Title</label>
+        <input type="text" id="flow-title" class="input-field" placeholder="Enter flow title">
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label" for="flow-subtitle">Subtitle</label>
+        <input type="text" id="flow-subtitle" class="input-field" placeholder="Enter flow subtitle">
+      </div>
+      
+      <button class="apply-button" id="apply-button-flow">APPLY</button>
+    </div>
+  </div>
+
+  <div class="form-screen" id="connector-arrows-form">
+    <div class="back-container">
+      <button class="back-button" id="back-button-connector">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+      <div class="back-title">Connector Arrows</div>
+    </div>
+    
+    <div class="form-container">
+      <div class="input-group mode-toggle">
+        <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0px;">
+            <label class="input-label">Background theme</label>
+            <div class="toggle-container">
+              <span class="mode-label">
+                <span class="material-symbols-rounded">light_mode</span>
+              </span>
+              <label class="switch">
+                <input type="checkbox" id="mode-toggle" checked>
+                <span class="slider round"></span>
+              </label>
+              <span class="mode-label">
+                <span class="material-symbols-rounded">dark_mode</span>
+              </span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0px;">
+            <label class="input-label">With text node</label>
+            <div class="toggle-container">
+              <span class="mode-label">
+                <span class="material-symbols-rounded">close</span>
+              </span>
+              <label class="switch">
+                <input type="checkbox" id="text-node-toggle">
+                <span class="slider round"></span>
+              </label>
+              <span class="mode-label">
+                <span class="material-symbols-rounded">check</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="connector-type">Type</label>
+        <select id="connector-type" class="input-field">
+          <option value="default">Default Line</option>
+          <option value="success">Success Line</option>
+          <option value="error">Error Line</option>
+          <option value="dashed">Dashed Line</option>
+        </select>
+      </div>
+      
+      <button class="apply-button" id="apply-button-connector">APPLY</button>
+    </div>
+  </div>
+
+  <script>
+    const options = ['frame-identifier', 'section-identifier', 'flow-identifier', 'connector-arrows'];
+    const mainScreen = document.getElementById('main-screen');
+    const frameForm = document.getElementById('frame-identifier-form');
+    const sectionForm = document.getElementById('section-identifier-form');
+    const flowForm = document.getElementById('flow-identifier-form');
+    const connectorForm = document.getElementById('connector-arrows-form');
+    const backButton = document.getElementById('back-button');
+    const backButtonSection = document.getElementById('back-button-section');
+    const backButtonFlow = document.getElementById('back-button-flow');
+    const backButtonConnector = document.getElementById('back-button-connector');
+    const applyButton = document.getElementById('apply-button');
+    const applyButtonSection = document.getElementById('apply-button-section');
+    const applyButtonFlow = document.getElementById('apply-button-flow');
+    const applyButtonConnector = document.getElementById('apply-button-connector');
+    
+    document.getElementById('frame-identifier').onclick = () => {
+      mainScreen.classList.add('hidden');
+      frameForm.classList.add('active');
+    };
+
+    document.getElementById('section-identifier').onclick = () => {
+      mainScreen.classList.add('hidden');
+      sectionForm.classList.add('active');
+    };
+
+    document.getElementById('flow-identifier').onclick = () => {
+      mainScreen.classList.add('hidden');
+      flowForm.classList.add('active');
+    };
+
+    document.getElementById('connector-arrows').onclick = () => {
+      mainScreen.classList.add('hidden');
+      connectorForm.classList.add('active');
+    };
+    
+    backButton.onclick = () => {
+      mainScreen.classList.remove('hidden');
+      frameForm.classList.remove('active');
+    };
+
+    backButtonSection.onclick = () => {
+      mainScreen.classList.remove('hidden');
+      sectionForm.classList.remove('active');
+    };
+
+    backButtonFlow.onclick = () => {
+      mainScreen.classList.remove('hidden');
+      flowForm.classList.remove('active');
+    };
+
+    backButtonConnector.onclick = () => {
+      mainScreen.classList.remove('hidden');
+      connectorForm.classList.remove('active');
+    };
+    
+    applyButton.onclick = () => {
+      const title = document.getElementById('title').value;
+      const subtitle = document.getElementById('subtitle').value;
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-frame-identifier',
+          title,
+          subtitle
+        }
+      }, '*');
+    };
+
+    applyButtonSection.onclick = () => {
+      const status = document.getElementById('section-status').value;
+      const title = document.getElementById('section-title').value;
+      const subtitle = document.getElementById('section-subtitle').value;
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-section-identifier',
+          status,
+          title,
+          subtitle
+        }
+      }, '*');
+    };
+
+    applyButtonFlow.onclick = () => {
+      const status = document.getElementById('flow-status').value;
+      const title = document.getElementById('flow-title').value;
+      const subtitle = document.getElementById('flow-subtitle').value;
+      
+      if (status === 'Select a status') {
+        // Show error message
+        const statusSelect = document.getElementById('flow-status');
+        statusSelect.style.borderColor = '#FF3B30';
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'show-error',
+            message: 'Please select a status'
+          }
+        }, '*');
+        return;
+      }
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-flow-identifier',
+          status,
+          title,
+          subtitle
+        }
+      }, '*');
+    };
+
+    // Reset the select border when changing the value
+    document.getElementById('flow-status').onchange = (e) => {
+      e.target.style.borderColor = 'var(--border-color)';
+    };
+
+    applyButtonConnector.onclick = () => {
+      const type = document.getElementById('connector-type').value;
+      const isDarkMode = document.getElementById('mode-toggle').checked;
+      const withTextNode = document.getElementById('text-node-toggle').checked;
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-connector',
+          connectorType: type,
+          forceDarkMode: isDarkMode,
+          withTextNode: withTextNode
+        }
+      }, '*');
+    };
+
+    // Remove the toggle handler since we no longer need to show/hide the text field
+    document.getElementById('text-node-toggle').onchange = null;
+  </script>
+</body>
+</html> 
