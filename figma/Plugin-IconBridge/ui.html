@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IconBridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --min-width: 100%;
+      --max-width: 100%;
+      --primary-color: #404040;
+      --primary-hover: #666666;
+      --bg-color: #000000;
+      --text-color: #FFFFFF;
+      --text-secondary: #999999;
+      --border-color: #333333;
+      --input-bg: #1A1A1A;
+      --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --result-box-bg: #1A1A1A;
+      --hover-bg: #262626;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 0;
+      padding-bottom: 24px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      width: 100%;
+      margin: 40px 0 0 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .header {
+      position: relative;
+      width: 100%;
+      height: auto;
+      background: var(--bg-color);
+      margin-bottom: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-sizing: border-box;
+    }
+
+    .header::before {
+      display: none;
+    }
+
+    .header h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 32px;
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      line-height: 1;
+    }
+
+    .header p {
+      position: relative;
+      z-index: 1;
+      margin: 8px 0 0 0;
+      font-size: 14px;
+      max-width: 600px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .content {
+      padding: 0 24px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .main-container {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 0;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    button {
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 8px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      width: auto;
+      margin: 16px 0 0;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+      box-shadow: var(--box-shadow);
+      display: inline-block;
+    }
+
+    button:hover {
+      background-color: var(--text-color);
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text-color);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .version {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+      margin-left: 4px;
+      line-height: 1;
+      transform: translateY(-2px);
+    }
+
+    .plugin-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0 0 16px 0;
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text-color);
+      margin: 0 0 16px 0;
+    }
+
+    p {
+      margin: 0 0 16px 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .error {
+      color: #D92C2C;
+      background-color: #FFEFEF;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .svg-list {
+      margin-top: 20px;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .svg-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background-color: var(--result-box-bg);
+      min-height: 64px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .svg-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--input-bg);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+      margin-right: 16px;
+    }
+
+    .svg-preview[data-mode="light"] {
+      background-color: #606060;
+    }
+
+    .svg-preview[data-mode="dark"] {
+      background-color: var(--input-bg);
+    }
+
+    .svg-preview svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .svg-name {
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      line-height: 1.2;
+      margin-right: 16px;
+      text-align: left;
+    }
+
+    .download-button {
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      height: 32px;
+      margin: 0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .download-button:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--primary-color);
+    }
+
+    .no-svgs {
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer button {
+      margin: 0;
+      height: 48px;
+    }
+
+    .secondary-button {
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      width: auto;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .secondary-button:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--primary-color);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .svg-preview:hover {
+      position: relative;
+      background-color: var(--hover-bg);
+    }
+
+    .tabs {
+      display: flex;
+      padding: 0 8px;
+      margin-bottom: 0;
+      margin-top: 1px;
+      position: relative;
+    }
+
+    .tab {
+      padding: 12px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .tab.active {
+      border-bottom: 2px solid var(--text-color);
+      color: var(--text-color);
+    }
+
+    .tab:hover {
+      color: var(--text-color);
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    .github-settings {
+      margin-bottom: 20px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background-color: var(--result-box-bg);
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .input-group:last-child {
+      margin-bottom: 24px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--text-color);
+      font-weight: 400;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 14px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--text-color);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .status-message {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status-message.error {
+      background-color: #FFEFEF;
+      color: #D92C2C;
+      border: 1px solid #FFD7D7;
+    }
+
+    .status-message.success {
+      background-color: #E6F4EA;
+      color: #137333;
+      border: 1px solid #C3E6CB;
+    }
+
+    .loader {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--text-secondary);
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      margin: 24px auto;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loader-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 16px;
+      }
+
+      .main-container {
+        padding: 16px;
+      }
+
+      .input-group {
+        margin-bottom: 12px;
+      }
+
+      .tab {
+        padding: 8px 8px;
+        font-size: 13px;
+      }
+    }
+
+    .input-example {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>IconBridge <span class="version">v1</span></h1>
+    <p>Seamless icon delivery from design to code—automate exports, optimize assets, and push them directly from Figma to GitHub</p>
+  </div>
+
+  <div class="content">
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <div class="tab active" data-tab="export-icon">Export Icon</div>
+      <div class="tab" data-tab="github-export">GitHub Settings</div>
+    </div>
+    
+    <!-- Export Icon Tab Content -->
+    <div class="tab-content active" id="export-icon-content">
+      <div class="main-container">
+        <p style="margin: 0 0 16px 0;">The plugin automatically syncs your selected icons. Use the button below to update your selection.</p>
+        
+        <button id="export-button" class="secondary-button" style="margin: 0 0 48px 0;">Sync</button>
+        
+        <div id="error-message" class="error"></div>
+        
+        <h2 style="margin-bottom: 24px;">Selected Icons</h2>
+        
+        <div id="svg-list" class="svg-list" style="margin-bottom: 24px !important;">
+          <div class="no-svgs" id="no-svgs">
+            Select frames or components and the plugin will sync automatically. If needed, click "Sync".
+          </div>
+        </div>
+
+        <div class="footer">
+          <button id="export-all-button" class="secondary-button hidden">Save Icons</button>
+          <button id="export-to-github" class="button hidden">Export to GitHub</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- GitHub Export Tab Content -->
+    <div id="github-export-content" class="tab-content">
+      <div class="main-container">
+        <div class="input-group">
+          <label for="github-token">GitHub Personal Access Token</label>
+          <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+          <span class="input-example">Example: ghp_xxxxxxxxxxxx</span>
+        </div>
+        
+        <div class="input-group">
+          <label for="github-repo">Repository</label>
+          <input type="text" id="github-repo" placeholder="username/repository">
+          <span class="input-example">Example: username/repository</span>
+        </div>
+        
+        <div class="input-group">
+          <label for="github-path">Export Path</label>
+          <input type="text" id="github-path" placeholder="path/to/icons/">
+          <span class="input-example">Example: path/to/icons/</span>
+        </div>
+        
+        <button id="save-github-settings" style="height: 48px;">Save Settings</button>
+        <div id="github-status" class="status-message"></div>
+      </div>
+    </div>
+
+    <div class="loader-container hidden" id="loaderContainer">
+      <div class="loader"></div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize UI elements and event listeners
+    function initializeUI() {
+      console.log('Initializing UI elements...');
+      
+      // Initialize buttons
+      const exportButton = document.getElementById('export-button');
+      const exportAllButton = document.getElementById('export-all-button');
+      const exportToGithubButton = document.getElementById('export-to-github');
+      const saveGithubSettingsButton = document.getElementById('save-github-settings');
+      
+      if (!exportButton || !exportAllButton) {
+        console.error('Required buttons not found');
+        return;
+      }
+      
+      console.log('Setting up button event listeners...');
+      
+      // Export button click event
+      exportButton.onclick = () => {
+        console.log('Export button clicked');
+        parent.postMessage({ pluginMessage: { type: 'export-frames' } }, '*');
+      };
+      
+      // Export all button click event
+      exportAllButton.onclick = () => {
+        console.log('Export all button clicked');
+        downloadAllSVGs();
+      };
+      
+      // GitHub Export button click event
+      if (exportToGithubButton) {
+        exportToGithubButton.onclick = () => {
+          console.log('Export to GitHub button clicked');
+          const token = document.getElementById('github-token').value.trim();
+          const repo = document.getElementById('github-repo').value.trim();
+          const path = document.getElementById('github-path').value.trim() || 'packages/centauri_icons/assets/svg/';
+          
+          if (!token || !repo) {
+            showError('Please configure the GitHub token and repository in the GitHub Settings tab.');
+            return;
+          }
+          
+          const confirmMessage = `Icons will be saved to: ${path}\nDo you want to continue?`;
+          if (!confirm(confirmMessage)) {
+            return;
+          }
+          
+          showMessage('Exporting to GitHub...');
+          
+          parent.postMessage({
+            pluginMessage: {
+              type: 'export-to-github'
+            }
+          }, '*');
+        };
+      }
+      
+      // Save GitHub settings button click event
+      if (saveGithubSettingsButton) {
+        saveGithubSettingsButton.onclick = () => {
+          console.log('Save GitHub settings button clicked');
+          const token = document.getElementById('github-token').value.trim();
+          const repo = document.getElementById('github-repo').value.trim();
+          const path = document.getElementById('github-path').value.trim();
+          
+          if (!token || !repo) {
+            showGithubStatus('Please fill in all required fields.', true);
+            return;
+          }
+          
+          parent.postMessage({ 
+            pluginMessage: { 
+              type: 'save-github-settings', 
+              token: token, 
+              repo: repo,
+              path: path
+            } 
+          }, '*');
+        };
+      }
+      
+      console.log('UI initialization complete');
+    }
+
+    // Call initialization when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initializeUI);
+
+    // UI Elements
+    const exportButton = document.getElementById('export-button');
+    const exportAllButton = document.getElementById('export-all-button');
+    const errorMessage = document.getElementById('error-message');
+    const svgList = document.getElementById('svg-list');
+    const noSvgsMessage = document.getElementById('no-svgs');
+    
+    // Tab navigation
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs and contents
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Show corresponding content
+        const tabId = tab.getAttribute('data-tab');
+        document.getElementById(`${tabId}-content`).classList.add('active');
+        
+        // Notify the plugin about tab change
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'tab-changed', 
+            tab: tabId 
+          } 
+        }, '*');
+      });
+    });
+    
+    // List of exported SVGs
+    let exportedSVGs = [];
+    
+    // Vector data for interactive editing
+    let vectorData = null;
+    let vectorPaths = [];
+    let hoveredPath = null;
+    
+    // Function to show message
+    function showMessage(message, isDiagnostic = false) {
+      if (isDiagnostic) {
+        diagnosticMessage.textContent = message;
+        diagnosticMessage.style.display = 'block';
+      } else {
+        errorMessage.textContent = message;
+        errorMessage.style.color = '#4CAF50';
+        errorMessage.style.backgroundColor = '#E8F5E9';
+        errorMessage.style.display = 'block';
+        
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+          errorMessage.style.color = '#D92C2C';
+          errorMessage.style.backgroundColor = '#FFEFEF';
+        }, 5000);
+      }
+    }
+    
+    // Function to show error message
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.color = '#D92C2C';
+      errorMessage.style.backgroundColor = '#FFEFEF';
+      errorMessage.style.display = 'block';
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Function to check if an SVG is dark
+    function isDarkSVG(svgElement) {
+      // Get all paths and their fill colors
+      const paths = svgElement.querySelectorAll('path');
+      let darkPaths = 0;
+      let totalPaths = paths.length;
+      
+      if (totalPaths === 0) return false;
+      
+      paths.forEach(path => {
+        const fill = path.getAttribute('fill');
+        if (fill) {
+          // Convert hex to RGB
+          const hex = fill.replace('#', '');
+          const r = parseInt(hex.substr(0, 2), 16);
+          const g = parseInt(hex.substr(2, 2), 16);
+          const b = parseInt(hex.substr(4, 2), 16);
+          
+          // Calculate brightness
+          const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+          
+          // If brightness is less than 128, consider it dark
+          if (brightness < 128) {
+            darkPaths++;
+          }
+        }
+      });
+      
+      // If more than 50% of paths are dark, consider the SVG dark
+      return (darkPaths / totalPaths) > 0.5;
+    }
+    
+    // Function to update the SVG list
+    function updateSVGList() {
+      while (svgList.firstChild) {
+        svgList.removeChild(svgList.firstChild);
+      }
+      
+      if (exportedSVGs.length === 0) {
+        svgList.appendChild(noSvgsMessage);
+        exportAllButton.classList.add('hidden');
+        document.getElementById('export-to-github').classList.add('hidden');
+        return;
+      }
+
+      noSvgsMessage.style.display = 'none';
+      exportAllButton.classList.remove('hidden');
+      
+      const githubToken = document.getElementById('github-token').value;
+      const githubRepo = document.getElementById('github-repo').value;
+      if (githubToken && githubRepo) {
+        document.getElementById('export-to-github').classList.remove('hidden');
+      }
+      
+      exportedSVGs.forEach(svg => {
+        const svgItem = document.createElement('div');
+        svgItem.className = 'svg-item';
+        
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'svg-preview';
+        // Set the mode based on the file name
+        const mode = svg.name.endsWith('-light') ? 'light' : 'dark';
+        previewContainer.setAttribute('data-mode', mode);
+        previewContainer.innerHTML = svg.svg;
+        
+        const svgElement = previewContainer.querySelector('svg');
+        if (svgElement) {
+          svgElement.setAttribute('width', '24');
+          svgElement.setAttribute('height', '24');
+        }
+        
+        const svgName = document.createElement('div');
+        svgName.className = 'svg-name';
+        svgName.textContent = svg.name + '.svg';
+        
+        const downloadButton = document.createElement('button');
+        downloadButton.className = 'download-button';
+        downloadButton.textContent = 'Download';
+        downloadButton.onclick = () => downloadSVG(svg);
+        
+        svgItem.appendChild(previewContainer);
+        svgItem.appendChild(svgName);
+        svgItem.appendChild(downloadButton);
+        svgList.appendChild(svgItem);
+      });
+    }
+    
+    // Function to download an SVG
+    function downloadSVG(svg) {
+      const blob = new Blob([svg.svg], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = svg.name + '.svg';
+      a.click();
+      
+      URL.revokeObjectURL(url);
+    }
+    
+    // Function to download all SVGs individually
+    function downloadAllSVGs() {
+      if (exportedSVGs.length === 0) {
+        showError('No icons to download.');
+        return;
+      }
+      
+      showMessage('Starting download of ' + exportedSVGs.length + ' icons...');
+      
+      exportAllButton.disabled = true;
+      exportAllButton.textContent = 'Preparing downloads...';
+      
+      const pendingDownloads = [...exportedSVGs];
+      let downloadedCount = 0;
+      
+      function downloadNextSVG() {
+        if (pendingDownloads.length === 0) {
+          exportAllButton.disabled = false;
+          exportAllButton.textContent = 'Save Icons';
+          showMessage(`All ${exportedSVGs.length} icons have been downloaded successfully!`);
+          return;
+        }
+        
+        const svg = pendingDownloads.shift();
+        
+        downloadedCount++;
+        exportAllButton.textContent = `Downloading ${downloadedCount}/${exportedSVGs.length}: ${svg.name}.svg`;
+        
+        const blob = new Blob([svg.svg], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = svg.name + '.svg';
+        document.body.appendChild(a);
+        
+        setTimeout(() => {
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showMessage(`Downloading ${downloadedCount}/${exportedSVGs.length}: ${svg.name}.svg`);
+          setTimeout(downloadNextSVG, 3000);
+        }, 500);
+      }
+      
+      downloadNextSVG();
+    }
+    
+    // Function to update fill rule preview
+    function updateFillRulePreview(data) {
+      if (!data) {
+        fillRuleMessage.classList.remove('hidden');
+        previewContainer.classList.add('hidden');
+        return;
+      }
+      
+      fillRuleMessage.classList.add('hidden');
+      previewContainer.classList.remove('hidden');
+      
+      // Store vector data for interactive editing
+      vectorData = data.svgData;
+      vectorNetworkData = data.vectorData;
+      
+      // Initialize the canvas
+      initCanvas();
+    }
+    
+    // Function to initialize the canvas for interactive editing
+    function initCanvas() {
+      if (!vectorData || !vectorCanvas) return;
+      
+      const ctx = vectorCanvas.getContext('2d');
+      const container = vectorCanvas.parentElement;
+      let svgElement = null;
+      let parser = new DOMParser();
+      let svgDoc = null;
+      
+      // Set canvas size to match container
+      function resizeCanvas() {
+        vectorCanvas.width = container.clientWidth;
+        vectorCanvas.height = 300; // Fixed height to prevent growing
+        renderVector();
+      }
+      
+      // Parse SVG data
+      function parseSVG() {
+        if (!vectorData) return false;
+        
+        try {
+          svgDoc = parser.parseFromString(vectorData, 'image/svg+xml');
+          svgElement = svgDoc.querySelector('svg');
+          return svgElement !== null;
+        } catch (e) {
+          console.error('Error parsing SVG:', e);
+          return false;
+        }
+      }
+      
+      // Initial parse
+      if (!parseSVG()) {
+        console.error('Failed to parse SVG data');
+        return;
+      }
+      
+      // Initial resize
+      resizeCanvas();
+      
+      // Resize on window resize
+      window.addEventListener('resize', resizeCanvas);
+      
+      // Render the vector
+      function renderVector() {
+        if (!ctx || !svgElement) return;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, vectorCanvas.width, vectorCanvas.height);
+        
+        // Get SVG viewBox
+        let viewBox = svgElement.getAttribute('viewBox');
+        let viewBoxValues = viewBox ? viewBox.split(' ').map(Number) : [0, 0, 100, 100];
+        
+        // Calculate scale to fit canvas
+        const svgWidth = viewBoxValues[2];
+        const svgHeight = viewBoxValues[3];
+        const scaleX = vectorCanvas.width / svgWidth;
+        const scaleY = vectorCanvas.height / svgHeight;
+        const scale = Math.min(scaleX, scaleY) * 0.7; // Reduzido para evitar distorção
+        
+        // Center the SVG
+        const offsetX = (vectorCanvas.width - svgWidth * scale) / 2;
+        const offsetY = (vectorCanvas.height - svgHeight * scale) / 2;
+        
+        // Draw SVG paths
+        const paths = svgElement.querySelectorAll('path');
+        vectorPaths = [];
+        
+        // Desenhar um fundo para o canvas
+        ctx.fillStyle = '#f9f9f9';
+        ctx.fillRect(0, 0, vectorCanvas.width, vectorCanvas.height);
+        
+        // Desenhar uma borda para mostrar os limites do SVG
+        ctx.save();
+        ctx.translate(offsetX, offsetY);
+        ctx.scale(scale, scale);
+        ctx.strokeStyle = '#ddd';
+        ctx.lineWidth = 1 / scale;
+        ctx.strokeRect(0, 0, svgWidth, svgHeight);
+        ctx.restore();
+        
+        // Desenhar cada caminho
+        paths.forEach((path, index) => {
+          const d = path.getAttribute('d');
+          if (!d) return; // Ignorar caminhos sem dados
+          
+          const fillRule = path.getAttribute('fill-rule') || 'nonzero';
+          const fill = path.getAttribute('fill') || '#000';
+          
+          // Store path data for interaction
+          vectorPaths.push({
+            d,
+            fillRule,
+            fill,
+            element: path,
+            index
+          });
+          
+          // Draw path
+          ctx.save();
+          ctx.translate(offsetX, offsetY);
+          ctx.scale(scale, scale);
+          
+          try {
+            // Create path
+            const p = new Path2D(d);
+            
+            // Fill with color based on fill rule
+            ctx.fillStyle = fillRule === 'evenodd' ? 'rgba(255, 127, 0, 0.25)' : 'rgba(63, 159, 255, 0.25)';
+            ctx.fill(p, fillRule);
+            
+            // Stroke path
+            ctx.strokeStyle = hoveredPath === index ? '#000' : '#777';
+            ctx.lineWidth = 1 / scale;
+            ctx.stroke(p);
+          } catch (e) {
+            console.error('Error rendering path:', e);
+          }
+          
+          ctx.restore();
+        });
+        
+        // Add informative text if no paths found
+        if (paths.length === 0) {
+          ctx.fillStyle = '#888';
+          ctx.font = '14px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText('No paths found in vector', vectorCanvas.width / 2, vectorCanvas.height / 2);
+        }
+      }
+      
+      // Handle mouse move for hover effect
+      vectorCanvas.addEventListener('mousemove', (e) => {
+        const rect = vectorCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Check if mouse is over a path
+        const prevHoveredPath = hoveredPath;
+        hoveredPath = null;
+        
+        // Get SVG viewBox for calculations
+        if (!svgElement) return;
+        
+        const viewBox = svgElement.getAttribute('viewBox');
+        const viewBoxValues = viewBox ? viewBox.split(' ').map(Number) : [0, 0, 100, 100];
+        const svgWidth = viewBoxValues[2];
+        const svgHeight = viewBoxValues[3];
+        const scaleX = vectorCanvas.width / svgWidth;
+        const scaleY = vectorCanvas.height / svgHeight;
+        const scale = Math.min(scaleX, scaleY) * 0.7;
+        const offsetX = (vectorCanvas.width - svgWidth * scale) / 2;
+        const offsetY = (vectorCanvas.height - svgHeight * scale) / 2;
+        
+        // Test each path
+        for (let i = 0; i < vectorPaths.length; i++) {
+          const path = vectorPaths[i];
+          if (!path.d) continue;
+          
+          try {
+            const p = new Path2D(path.d);
+            
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.scale(scale, scale);
+            
+            // Check if point is in path or stroke
+            if (ctx.isPointInPath(p, x, y) || ctx.isPointInStroke(p, x, y)) {
+              hoveredPath = i;
+              vectorCanvas.style.cursor = 'pointer';
+              ctx.restore();
+              break;
+            }
+            
+            ctx.restore();
+          } catch (e) {
+            console.error('Error testing path collision:', e);
+            ctx.restore();
+          }
+        }
+        
+        if (hoveredPath === null) {
+          vectorCanvas.style.cursor = 'default';
+        }
+        
+        // Redraw if hover state changed
+        if (prevHoveredPath !== hoveredPath) {
+          renderVector();
+        }
+      });
+      
+      // Handle click to toggle fill rule or reverse path
+      vectorCanvas.addEventListener('click', (e) => {
+        if (hoveredPath === null) return;
+        
+        const path = vectorPaths[hoveredPath];
+        if (!path) return;
+        
+        const currentFillRule = path.fillRule;
+        const newFillRule = currentFillRule === 'evenodd' ? 'nonzero' : 'evenodd';
+        
+        console.log(`Clicked on path ${hoveredPath}, changing fill rule from ${currentFillRule} to ${newFillRule}`);
+        
+        // Send message to plugin to apply fill rule to specific path
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'apply-fill-rule', 
+            fillRule: newFillRule,
+            pathIndex: hoveredPath
+          } 
+        }, '*');
+      });
+      
+      // Initial render
+      renderVector();
+    }
+    
+    // Listen for messages from the main code
+    window.onmessage = (event) => {
+      const message = event.data.pluginMessage;
+      
+      if (!message) return;
+      
+      if (message.type === 'error') {
+        showError(message.message);
+      } else if (message.type === 'export-complete') {
+        exportedSVGs = message.svgs;
+        updateSVGList();
+        
+        const token = document.getElementById('github-token').value;
+        const repo = document.getElementById('github-repo').value;
+        if (token && repo && exportedSVGs.length > 0) {
+          document.getElementById('export-to-github').classList.remove('hidden');
+        }
+      } else if (message.type === 'github-settings-loaded') {
+        document.getElementById('github-token').value = message.token || '';
+        document.getElementById('github-repo').value = message.repo || '';
+        document.getElementById('github-path').value = message.path || '';
+        
+        if (message.token && message.repo && exportedSVGs.length > 0) {
+          document.getElementById('export-to-github').classList.remove('hidden');
+        }
+        
+        if (message.error) {
+          showGithubStatus(`Error loading settings: ${message.error}`, true);
+        }
+      } else if (message.type === 'github-settings-saved') {
+        if (message.success) {
+          showGithubStatus('Settings saved successfully!', false);
+          
+          const token = document.getElementById('github-token').value;
+          const repo = document.getElementById('github-repo').value;
+          if (token && repo && exportedSVGs.length > 0) {
+            document.getElementById('export-to-github').classList.remove('hidden');
+          }
+        } else {
+          showGithubStatus(`Error saving settings: ${message.error}`, true);
+        }
+      } else if (message.type === 'github-export-status') {
+        showGithubStatus(message.message, !message.success);
+      }
+    };
+    
+    function showGithubStatus(message, isError = false) {
+      const statusElement = document.getElementById('github-status');
+      
+      statusElement.style.display = 'block';
+      statusElement.textContent = message;
+      
+      if (isError) {
+        statusElement.classList.add('error');
+        statusElement.classList.remove('success');
+      } else {
+        statusElement.classList.remove('error');
+        statusElement.classList.add('success');
+      }
+    }
+  </script>
+</body>
+</html>
