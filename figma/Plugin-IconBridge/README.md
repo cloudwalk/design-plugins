@@ -1,39 +1,53 @@
 # 🔗 IconBridge – Automated Icon Handoff from Figma to GitHub
 
-Seamless icon delivery from design to code—export, optimize, and push your icons directly from Figma to GitHub with zero manual effort. IconBridge ensures your icons are properly formatted, optimized, and instantly accessible for development, saving time and reducing errors.
+A powerful Figma plugin that automates icon exports, optimizes assets, and pushes them directly to GitHub—seamlessly integrating design and development. IconBridge eliminates manual file handling, ensuring every icon is correctly formatted, optimized, and instantly available for development.
 
-## 🎨 Quick & Optimized Icon Export
 
-For when you need to save icons locally while ensuring the best quality and performance.
+<br>
 
-1️⃣ Select your icons in Figma.
-2️⃣ Click "Export Icons" on the home screen.
-3️⃣ IconBridge automatically optimizes each icon, ensuring clean, lightweight SVGs.
-4️⃣ Generates light and dark mode variants automatically.
-5️⃣ Click "Save" to download optimized icons directly to your device.
+## ✨ Key Features
+- Quick & Optimized Icon Export – Save icons directly to your device with automatic SVG optimization and light/dark mode generation.
+- Seamless GitHub Integration – Push icons directly from Figma to GitHub, with automated organization and validation.
+- Build Automation – Runs melos build:icons, ensuring icons are properly implemented in Flutter & Web projects.
+- Automated Pull Request Creation – IconBridge commits and opens a GitHub PR automatically, streamlining the handoff process.
+- Secure Repository Access – Uses GitHub authentication to ensure private and controlled icon handoff.
 
-✅ Optimized SVG export with reduced file size
-✅ Light & Dark mode variants generated automatically
 
-## 🚀 Automated Handoff to GitHub
+<br>
 
-For when you want icons to go directly into your GitHub repository without manual uploads.
+## 🚀 How to Use
 
-1️⃣ Select your icons in Figma.
-2️⃣ Click "Push to GitHub" to begin the automation.
-3️⃣ IconBridge optimizes and validates each icon before uploading.
-4️⃣ Automatically organizes icons in the correct repository folder.
-5️⃣ Creates a pull request automatically, ready for developer review.
+### Quick & Optimized Icon Export
+- Select your icons in Figma.
+- Click “Export Icons” on the home screen.
+- IconBridge automatically optimizes each icon, ensuring clean, lightweight SVGs.
+- Generates light and dark mode variants automatically.
+- Click “Save” to download optimized icons directly to your device.
 
-✅ Zero manual file handling
-✅ Instantly accessible for development
-✅ Fully automated GitHub workflow
+### Automated Handoff to GitHub
+- Select your icons in Figma.
+- Click “Push to GitHub” to begin the automation.
+- IconBridge optimizes and validates each icon before uploading.
+- Automatically organizes icons in the correct repository folder.
+- Creates a pull request automatically, ready for developer review.
 
-## 🔒 Secure Access to Your Repository
 
-IconBridge ensures a secure connection to your GitHub repository:
-✔ Uses GitHub authentication to manage repository access.
-✔ No external storage—icons go directly from Figma to your repo.
-✔ Keeps your icon handoff private, controlled, and seamless.
+<br>
 
-🎨 Skip the tedious manual steps—let IconBridge handle everything from export to code! 🚀
+## 🛠️ What You’ll Need
+
+- A Figma project with icons.
+- A GitHub repository for automated exports.
+
+
+<br>
+
+## 🔒 Secure & Seamless Workflow
+IconBridge ensures a secure, efficient, and automated handoff process:
+- Direct Figma-to-GitHub integration—no external storage needed.
+- Authentication with GitHub to keep your repository secure.
+- Fully automated workflow—eliminating manual exports, uploads, and PR creation.
+
+<br>
+
+🚀 Forget tedious icon management—let IconBridge automate everything from Figma to production!
