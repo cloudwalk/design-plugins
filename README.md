@@ -30,7 +30,7 @@ Released under MIT License - Free for commercial use and modification.
 
 Report issues:
 GitHub Issues
-Email team: design-tools@cloudwalk.io
+Email team: dp-account@cloudwalk.io
 
 Copy
 
@@ -40,7 +40,7 @@ Copy
 ```text
 MIT License
 
-Copyright (c) 2023 Cloudwalk
+Copyright (c) 2025 Cloudwalk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
