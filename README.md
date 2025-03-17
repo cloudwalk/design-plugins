@@ -19,7 +19,8 @@ Collection of high-performance plugins that:
 └── README.md      # Usage documentation
 🚀 Installation
 
-bash
+```
+
 Copy
 git clone https://github.com/cloudwalk/design-plugins.git
 📜 License
