@@ -21,9 +21,7 @@ Collection of high-performance plugins that:
 
 ```
 
-Copy
 git clone https://github.com/cloudwalk/design-plugins.git
-📜 License
 
 Released under MIT License - Free for commercial use and modification.
 
