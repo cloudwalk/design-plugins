@@ -1,0 +1,182 @@
+{
+    "toneOptions": {
+      "en-US": {
+        "standard": {
+          "label": "Standard tone",
+          "instructions": "Write in a clear and professional manner. Use simple language and maintain a balanced tone."
+        },
+        "success": {
+          "label": "Success message",
+          "instructions": "Communicate success in a positive and professional way. Provide clear next steps when needed."
+        },
+        "error": {
+          "label": "Error message",
+          "instructions": "Explain the issue clearly and provide a solution. Keep the tone helpful and constructive."
+        },
+        "cta": {
+          "label": "Call to action",
+          "instructions": "Use clear and actionable language. Keep text concise and informative."
+        },
+        "warning": {
+          "label": "Warning message",
+          "instructions": "Clearly communicate important information or warnings. Provide guidance in a professional manner."
+        }
+      },
+      "pt-BR": {
+        "standard": {
+          "label": "Tom padrão",
+          "instructions": "Write in a clear and professional manner. Use simple language and maintain a balanced tone."
+        },
+        "success": {
+          "label": "Mensagem de sucesso",
+          "instructions": "Communicate success in a positive and professional way. Provide clear next steps when needed."
+        },
+        "error": {
+          "label": "Mensagem de erro",
+          "instructions": "Explain the issue clearly and provide a solution. Keep the tone helpful and constructive."
+        },
+        "cta": {
+          "label": "Call to action",
+          "instructions": "Use clear and actionable language. Keep text concise and informative."
+        },
+        "warning": {
+          "label": "Mensagem de alerta",
+          "instructions": "Clearly communicate important information or warnings. Provide guidance in a professional manner."
+        }
+      },
+      "es": {
+        "standard": {
+          "label": "Tono estándar",
+          "instructions": "Write in a clear and professional manner. Use simple language and maintain a balanced tone."
+        },
+        "success": {
+          "label": "Mensaje de éxito",
+          "instructions": "Communicate success in a positive and professional way. Provide clear next steps when needed."
+        },
+        "error": {
+          "label": "Mensaje de error",
+          "instructions": "Explain the issue clearly and provide a solution. Keep the tone helpful and constructive."
+        },
+        "cta": {
+          "label": "Llamada a la acción",
+          "instructions": "Use clear and actionable language. Keep text concise and informative."
+        },
+        "warning": {
+          "label": "Mensaje de alerta",
+          "instructions": "Clearly communicate important information or warnings. Provide guidance in a professional manner."
+        }
+      }
+    },
+    "suggestionOptions": {
+      "en-US": {
+        "friendly": {
+          "label": "More friendly",
+          "instructions": "Make the text more approachable while maintaining professionalism."
+        },
+        "formal": {
+          "label": "More formal",
+          "instructions": "Adjust to a more formal and professional tone while maintaining clarity."
+        },
+        "shorter": {
+          "label": "Shorter",
+          "instructions": "Make the text more concise while preserving the core message."
+        },
+        "longer": {
+          "label": "More detailed",
+          "instructions": "Add relevant details while maintaining clarity and professionalism."
+        }
+      },
+      "pt-BR": {
+        "friendly": {
+          "label": "Mais amigável",
+          "instructions": "Make the text more approachable while maintaining professionalism."
+        },
+        "formal": {
+          "label": "Mais formal",
+          "instructions": "Adjust to a more formal and professional tone while maintaining clarity."
+        },
+        "shorter": {
+          "label": "Mais curto",
+          "instructions": "Make the text more concise while preserving the core message."
+        },
+        "longer": {
+          "label": "Mais detalhado",
+          "instructions": "Add relevant details while maintaining clarity and professionalism."
+        }
+      },
+      "es": {
+        "friendly": {
+          "label": "Más amigable",
+          "instructions": "Make the text more approachable while maintaining professionalism."
+        },
+        "formal": {
+          "label": "Más formal",
+          "instructions": "Adjust to a more formal and professional tone while maintaining clarity."
+        },
+        "shorter": {
+          "label": "Más corto",
+          "instructions": "Make the text more concise while preserving the core message."
+        },
+        "longer": {
+          "label": "Más detallado",
+          "instructions": "Add relevant details while maintaining clarity and professionalism."
+        }
+      }
+    },
+    "languageOptions": {
+      "en-US": {
+        "label": "English",
+        "icon": "🇺🇸",
+        "instructions": "Write in clear and professional English.",
+        "interface": {
+          "title": "Writing Assistant",
+          "emptyStateTitle": "No text selected",
+          "emptyStateDesc": "Select a text in Figma to start",
+          "toneLabel": "Tone of voice",
+          "generateButton": "Generate Alternatives",
+          "generating": "Generating alternatives...",
+          "alternativesTitle": "Alternatives",
+          "suggestionCount": "suggestions",
+          "selectedTexts": "selected texts",
+          "chat": "Chat",
+          "suggestionsTitle": "Suggestions"
+        }
+      },
+      "pt-BR": {
+        "label": "Português",
+        "icon": "🇧🇷",
+        "instructions": "Write in Brazilian Portuguese using clear and professional language.",
+        "interface": {
+          "title": "Assistente de Escrita",
+          "emptyStateTitle": "Nenhum texto selecionado",
+          "emptyStateDesc": "Selecione um texto no Figma para começar",
+          "toneLabel": "Tom de voz",
+          "generateButton": "Gerar Alternativas",
+          "generating": "Gerando alternativas...",
+          "alternativesTitle": "Alternativas",
+          "suggestionCount": "sugestões",
+          "selectedTexts": "textos selecionados",
+          "chat": "Chat",
+          "suggestionsTitle": "Sugestões"
+        }
+      },
+      "es": {
+        "label": "Español",
+        "icon": "🇪🇸",
+        "instructions": "Write in Spanish using clear and professional language.",
+        "interface": {
+          "title": "Asistente de Escritura",
+          "emptyStateTitle": "Ningún texto seleccionado",
+          "emptyStateDesc": "Selecciona un texto en Figma para comenzar",
+          "toneLabel": "Tono de voz",
+          "generateButton": "Generar Alternativas",
+          "generating": "Generando alternativas...",
+          "alternativesTitle": "Alternativas",
+          "suggestionCount": "sugerencias",
+          "selectedTexts": "textos seleccionados",
+          "chat": "Chat",
+          "suggestionsTitle": "Sugerencias"
+        }
+      }
+    }
+} 

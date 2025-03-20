@@ -1,0 +1,18 @@
+{
+  "name": "NornAI - for Cloudwalk",
+  "id": "1463174902135613198",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": [
+      "*"
+    ],
+    "reasoning": "The plugin needs to access any domain because it fetches images from DuckDuckGo search results, which can come from any website. The image URLs are not known in advance and can be from any domain on the internet."
+  },
+  "capabilities": [
+    "textreview"
+  ],
+  "documentAccess": "dynamic-page"
+}

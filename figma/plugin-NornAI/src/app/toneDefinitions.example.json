@@ -1,0 +1,92 @@
+{
+  "toneOptions": {
+    "pt-BR": {
+      "standard": {
+        "label": "Tom padrão",
+        "instructions": "Escreva de forma clara e direta. Use linguagem simples e profissional."
+      },
+      "success": {
+        "label": "Mensagem de sucesso",
+        "instructions": "Comunique o sucesso de forma positiva. Seja encorajador e celebre a conquista."
+      },
+      "error": {
+        "label": "Mensagem de erro",
+        "instructions": "Explique o erro claramente e ofereça uma solução. Mantenha um tom calmo e prestativo."
+      }
+    },
+    "en-US": {
+      "standard": {
+        "label": "Standard tone",
+        "instructions": "Write clearly and directly. Use simple and professional language."
+      },
+      "success": {
+        "label": "Success message",
+        "instructions": "Communicate success positively. Be encouraging and celebrate the achievement."
+      },
+      "error": {
+        "label": "Error message",
+        "instructions": "Explain the error clearly and offer a solution. Maintain a calm and helpful tone."
+      }
+    }
+  },
+  "suggestionOptions": {
+    "pt-BR": {
+      "friendly": {
+        "label": "Mais amigável",
+        "instructions": "Torne o texto mais amigável e acolhedor."
+      },
+      "formal": {
+        "label": "Mais formal",
+        "instructions": "Torne o texto mais formal e profissional."
+      }
+    },
+    "en-US": {
+      "friendly": {
+        "label": "More friendly",
+        "instructions": "Make the text friendlier and more welcoming."
+      },
+      "formal": {
+        "label": "More formal",
+        "instructions": "Make the text more formal and professional."
+      }
+    }
+  },
+  "languageOptions": {
+    "pt-BR": {
+      "label": "Português",
+      "icon": "🇧🇷",
+      "instructions": "Escreva em português brasileiro.",
+      "interface": {
+        "title": "Assistente de Escrita",
+        "emptyStateTitle": "Nenhum texto selecionado",
+        "emptyStateDesc": "Selecione um texto no Figma para começar",
+        "toneLabel": "Tom de voz",
+        "generateButton": "Gerar Alternativas",
+        "generating": "Gerando alternativas...",
+        "alternativesTitle": "Alternativas",
+        "suggestionCount": "sugestões",
+        "selectedTexts": "textos selecionados",
+        "chat": "Chat",
+        "suggestionsTitle": "Sugestões"
+      }
+    },
+    "en-US": {
+      "label": "English",
+      "icon": "🇺🇸",
+      "instructions": "Write in American English.",
+      "interface": {
+        "title": "Writing Assistant",
+        "emptyStateTitle": "No text selected",
+        "emptyStateDesc": "Select a text in Figma to start",
+        "toneLabel": "Tone of voice",
+        "generateButton": "Generate Alternatives",
+        "generating": "Generating alternatives...",
+        "alternativesTitle": "Alternatives",
+        "suggestionCount": "suggestions",
+        "selectedTexts": "selected texts",
+        "chat": "Chat",
+        "suggestionsTitle": "Suggestions"
+      }
+    }
+  }
+} 
