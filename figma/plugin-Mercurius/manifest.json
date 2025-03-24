@@ -1,0 +1,19 @@
+{
+    "name": "Mercurius - Smart Exporter for WEBP, PNG, and JPG",
+    "id": "1472758296832108743",
+    "api": "1.0.0",
+    "main": "code.js",
+    "capabilities": [],
+    "enableProposedApi": false,
+    "editorType": ["figma"],
+    "ui": "ui.html",
+    "networkAccess": {
+        "allowedDomains": [
+            "https://api.openai.com",
+            "https://fonts.googleapis.com",
+            "https://fonts.gstatic.com",
+            "https://i.ibb.co"
+        ]
+    },
+    "documentAccess": "dynamic-page"
+}

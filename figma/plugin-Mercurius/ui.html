@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined|Material+Icons+Round" rel="stylesheet">
+  <style>
+    :root {
+      --min-width: 400px;
+      --max-width: 800px;
+      --primary-color: #404040;
+      --primary-hover: #666666;
+      --bg-color: #000000;
+      --text-color: #FFFFFF;
+      --text-secondary: #999999;
+      --border-color: #333333;
+      --input-bg: #1A1A1A;
+      --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --result-box-bg: #1A1A1A;
+      --hover-bg: #262626;
+    }
+    
+    /* Adicionando estilos do header */
+    .header-image {
+      position: relative;
+      height: 200px;
+      margin: 0;
+      padding: 24px 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-sizing: border-box;
+    }
+
+    .header-image img {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 200px;
+      object-fit: cover;
+      object-position: center 40%;
+      z-index: 0;
+    }
+
+    .header-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 100%;
+      background: linear-gradient(to bottom, 
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0.4) 50%,
+        rgba(0,0,0,0.8) 80%,
+        rgba(0,0,0,1) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .header-image h2 {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      font-size: 32px;
+      color: var(--text-color);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .api-key-chip {
+      background-color: var(--input-bg);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .api-key-chip:hover {
+      background-color: var(--border-color);
+    }
+
+    .api-key-chip .material-icons {
+      font-size: 14px;
+      color: var(--text-color);
+      margin-left: auto;
+    }
+
+    .header-image p {
+      position: relative;
+      z-index: 2;
+      margin: 8px 0 0 0;
+      color: var(--text-secondary);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 0 40px;
+      padding-bottom: 80px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-width: var(--min-width);
+      max-width: var(--max-width);
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      overflow-x: hidden;
+      padding-right: calc(40px + 8px); /* 40px do padding original + 8px da largura da scrollbar */
+      overflow-y: overlay; /* Usa overlay ao invés de auto/scroll */
+    }
+
+    /* Estilização da scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color);
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+      border: 2px solid var(--bg-color);
+      position: absolute;
+      right: 0;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+    
+    /* Esconder scrollbar no Firefox mas manter funcionalidade */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) var(--bg-color);
+    }
+
+    .main-container {
+
+      border-radius: 12px;
+   
+      margin-top: 16px;
+      width: 100%;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    button {
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 8px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      width: auto;
+      margin: 16px 0 0;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+      box-shadow: var(--box-shadow);
+      display: inline-block;
+    }
+
+    button#analyze {
+      margin: 16px 0 0;
+    }
+
+    button:hover {
+      background-color: var(--text-color);
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .status {
+      margin-top: 12px;
+      color: var(--text-color);
+    }
+    .info-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .dimension-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .dimension-item .material-icons-round {
+      font-size: 16px;
+      color: var(--text-color);
+    }
+    .dimension-label {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    .dimension-value {
+      color: var(--text-secondary);
+    }
+    #dimensions, #dimensionsExport {
+      display: flex;
+      gap: 24px;
+      margin: 0 0 16px;
+      padding: 16px;
+      background: var(--input-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--text-color);
+      box-shadow: none;
+    }
+    .result-box {
+      margin-top: 16px;
+      padding: 16px;
+      background-color: var(--result-box-bg);
+      border-radius: 8px;
+
+      box-shadow: var(--box-shadow);
+    }
+    .result-box:first-child {
+      margin-top: 0;
+    }
+    .result-label {
+      font-weight: 500;
+      color: var(--text-color);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .result-content {
+      min-height: 20px;
+      word-wrap: break-word;
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    #description {
+      margin-bottom: 8px;
+    }
+    #exportOptions {
+      display: none;
+      margin-top: 16px;
+    }
+    .export-label {
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-color);
+      font-size: 14px;
+    }
+    .size-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .size-button {
+      background-color: #262626;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 12px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 12px;
+      transition: all 0.2s ease;
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: normal;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .size-button:hover {
+      background-color: #333333;
+      border-color: #404040;
+    }
+    .size-button.selected {
+      background-color: var(--text-color);
+      border-color: var(--text-color);
+    }
+    .size-button.selected .scale {
+      color: var(--bg-color);
+    }
+    .size-button.selected .dimensions {
+      color: var(--bg-color);
+      opacity: 0.7;
+    }
+    .size-button .scale {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    .size-button .dimensions {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .filename-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+    .filename-display {
+      flex-grow: 1;
+      padding: 8px 0px;
+      background-color: transparent;
+      border-radius: 8px;
+      min-height: 20px;
+      color: var(--text-secondary);
+    }
+    .filename-edit {
+      display: none;
+      width: calc(100% - 32px);
+      margin: 4px 0;
+      padding: 8px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+    }
+    .edit-icon {
+      cursor: pointer;
+      padding: 4px 8px;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+    }
+    .edit-icon:hover {
+      color: var(--primary-color);
+    }
+    .edit-mode .filename-display {
+      display: none;
+    }
+    .edit-mode .filename-edit {
+      display: block;
+    }
+    .edit-mode .edit-icon .material-icons-round {
+      content: 'check';
+    }
+    ::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    @media (min-width: 600px) {
+      .size-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 800px) {
+      .size-buttons {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 16px;
+      }
+
+      .main-container {
+        padding: 16px;
+      }
+
+      .info-line {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      input[type="number"]#maxSize {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+
+    h2 {
+      margin: 0 0 16px 0;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--text-color);
+    }
+
+    h2.section-title {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin: 0 0 16px 0;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 6px 8px;
+      margin: 4px 0;
+      border: 1px solid #404040;
+      border-radius: 4px;
+      background-color: #2D2D2D;
+      color: #E0E0E0;
+      font-size: 13px;
+      -moz-appearance: textfield;
+    }
+    
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Adicionar estilos do loader e estados de visibilidade */
+    .hidden {
+      display: none !important;
+    }
+
+    .loader-container, .initial-loader, .loader {
+      display: none !important;
+    }
+
+    @keyframes rotation {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .description-container {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .material-icons-round {
+      font-size: 20px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-api-key {
+      font-size: 18px !important;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      padding: 4px 8px;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+      color: var(--text-color);
+    }
+
+    #imageDescription {
+      padding-right: 40px;
+    }
+
+    .copy-feedback {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .copy-feedback.visible {
+      opacity: 1;
+    }
+
+    /* Removendo os estilos do status de exportação */
+    .export-status,
+    .export-status .loader,
+    .export-status.visible {
+      display: none !important;
+    }
+
+    .floating-button {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      margin: 0 !important;
+      z-index: 1000;
+      padding: 8px 24px !important;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .floating-button.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .change-key-button {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background-color: transparent !important;
+      color: var(--text-secondary) !important;
+      border: 1px solid var(--border-color) !important;
+      padding: 8px 16px !important;
+      font-size: 11px !important;
+      margin: 0 !important;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+    }
+
+    .change-key-button:hover {
+      opacity: 1;
+      background-color: var(--input-bg) !important;
+      transform: translateY(0) !important;
+    }
+
+    #exportButton, #exportButtonSimple {
+      position: static !important;
+      width: auto !important;
+      margin-top: 24px !important;
+      display: inline-block !important;
+      transform: none !important;
+      padding: 12px 32px !important;
+      background-color: var(--text-color) !important;
+      color: var(--bg-color) !important;
+      opacity: 0.5;
+      pointer-events: none;
+      transition: all 0.2s ease !important;
+    }
+
+    #exportButton.enabled, #exportButtonSimple.enabled {
+      opacity: 1 !important;
+      cursor: pointer !important;
+      pointer-events: all !important;
+    }
+
+    #exportButton:hover.enabled, #exportButtonSimple:hover.enabled {
+      opacity: 0.9 !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .format-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .format-button {
+      background-color: #262626;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s ease;
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: normal;
+      flex: 1;
+      text-align: center;
+    }
+
+    .format-button:hover {
+      background-color: #333333;
+      border-color: #404040;
+    }
+
+    .format-button.selected {
+      background-color: var(--text-color);
+      border-color: var(--text-color);
+      color: var(--bg-color);
+    }
+
+    .home-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      padding: 0px 0;
+    }
+
+    .home-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 24px !important;
+      font-size: 14px !important;
+      text-transform: none !important;
+      letter-spacing: normal !important;
+      background-color: var(--input-bg) !important;
+      color: var(--text-color) !important;
+      border-radius: 12px !important;
+      text-align: center;
+      min-height: 160px;
+      margin-top: 0px !important
+    }
+
+    .home-button:hover {
+      background-color: var(--hover-bg) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .home-button .material-icons-round {
+      font-size: 32px;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+
+    .home-button .title {
+      font-weight: 600;
+      margin-bottom: 2px;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .home-button .description {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      font-weight: 400;
+      text-wrap: balance;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 24px;
+      background-color: transparent !important;
+      color: var(--text-secondary) !important;
+      border: 1px solid var(--border-color) !important;
+      padding: 8px !important;
+      margin: 0 !important;
+      width: 40px !important;
+      height: 40px !important;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+    }
+
+    .back-button:hover {
+      opacity: 1;
+      background-color: var(--input-bg) !important;
+      transform: translateY(0) !important;
+    }
+
+    .back-button .material-icons-round {
+      font-size: 24px;
+    }
+
+    .floating-process-button {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--bg-color) !important;
+      color: var(--text-color) !important;
+      border: 1px solid var(--border-color) !important;
+      padding: 12px 24px !important;
+      font-size: 13px !important;
+      margin: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 1000;
+      display: none;
+    }
+
+    .floating-process-button.visible {
+      opacity: 1;
+      pointer-events: all;
+      display: block;
+    }
+
+    .floating-process-button:hover {
+      background-color: var(--hover-bg) !important;
+      transform: translateX(-50%) translateY(-2px) !important;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="homeScreen" class="screen visible">
+    <div class="header-image">
+      <img src="https://i.ibb.co/Q3LpLsCT/midip-A-single-hyper-realistic-angel-wing-floating-in-a-pitch-b-c2e53d90-3086-453a-97c7-ea641a02ca87.png" alt="Angel wing background">
+      <div class="header-content">
+        <h2>Mercurius</h2>
+      </div>
+      <p>Select an image in Figma to analyze or export.</p>
+    </div>
+
+    <div class="main-container">
+      <div class="home-buttons">
+        <button id="goToExport" class="home-button">
+          <span class="material-icons-round">file_download</span>
+          <span class="title">Export an image</span>
+          <span class="description">Export your image in multiple formats and sizes with automatic optimization.</span>
+        </button>
+        <button id="goToAnalyze" class="home-button">
+          <span class="material-icons-round">image</span>
+          <span class="title">Analyze image</span>
+          <span class="description">Get AI-powered analysis of your image with smart file naming suggestions.</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="authScreen" class="screen">
+    <h2>Mercurius</h2>
+    <p>Enter your OpenAI API key to start analyzing images.</p>
+    
+    <div class="main-container">
+      <div class="result-box" style="margin-top: 0;">
+        <div class="result-label">Authentication</div>
+        <input type="text" id="apiKey" placeholder="Enter your OpenAI API key" />
+      </div>
+      <button id="startAnalyze">Continue</button>
+    </div>
+  </div>
+
+  <div id="analysisScreen" class="screen">
+    <button id="backToHomeAnalysis" class="back-button">
+      <span class="material-icons-round">arrow_back</span>
+    </button>
+    <button id="changeApiKey" class="change-key-button">Change API Key</button>
+    <div class="header-image">
+      <img src="https://i.ibb.co/Q3LpLsCT/midip-A-single-hyper-realistic-angel-wing-floating-in-a-pitch-b-c2e53d90-3086-453a-97c7-ea641a02ca87.png" alt="Angel wing background">
+      <div class="header-content">
+        <h2>Mercurius</h2>
+        <div class="api-key-chip" onclick="showScreen('authScreen')">
+          <span class="key-text">OpenAI API Key: sk-...SBgA</span>
+          <span class="material-icons-round edit-api-key">edit</span>
+        </div>
+      </div>
+      <p>Select an image in Figma to analyze and export.</p>
+    </div>
+
+    <button id="analyze" style="margin-top: 24px;">Analyze</button>
+
+    <div class="analysis-container hidden" id="analysisContainer">
+      <div class="main-container">
+        <h2 class="section-title">Analysis Results</h2>
+        <div id="dimensions">
+          <div class="dimension-item" id="selectedFrameAnalysis">
+            <span class="material-icons-round">crop_original</span>
+            <span><span class="dimension-label">Selected frame:</span> <span class="dimension-value">Frame name</span></span>
+          </div>
+          <div class="dimension-item" id="size">
+            <span class="material-icons-round">straighten</span>
+            <span><span class="dimension-label">Dimensions:</span> <span class="dimension-value">960x960px</span></span>
+          </div>
+          <div class="dimension-item" id="ratio">
+            <span class="material-icons-round">aspect_ratio</span>
+            <span><span class="dimension-label">Aspect Ratio:</span> <span class="dimension-value">1:1</span></span>
+          </div>
+        </div>
+        
+        <div id="description" class="result-box">
+          <div class="result-label">Image description</div>
+          <div class="description-container">
+            <div id="imageDescription" class="result-content">
+              Image description will appear here...
+            </div>
+            <div id="copyIcon" class="copy-icon" title="Copy description">
+              <span class="material-icons-round">content_copy</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="filename" class="result-box">
+          <div class="result-label">File name</div>
+          <div class="filename-container">
+            <div id="filenameDisplay" class="filename-display result-content">
+              Suggested name will appear here...
+            </div>
+            <input type="text" id="suggestedName" class="filename-edit result-content" />
+            <div id="editIcon" class="edit-icon" title="Edit name">
+              <span class="material-icons-round">edit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-container">
+        <h2 class="section-title">Export Settings</h2>
+        <div class="result-box" style="margin-top: 0;">
+          <div class="result-label">Set maximum file size</div>
+          <div class="info-line" style="display: flex; align-items: center; gap: 12px;">
+            <label for="maxSize">Maximum size (MB)</label>
+            <input type="text" id="maxSize" value="0.2" style="width: 80px;" pattern="[0-9]*[.]?[0-9]+" />
+          </div>
+        </div>
+
+        <div id="exportOptions" class="result-box">
+          <div class="result-label" style="margin-bottom: 4px;">File format</div>
+          <div class="format-buttons" id="formatButtons">
+            <button class="format-button selected" data-format="webp">WEBP</button>
+            <button class="format-button" data-format="png">PNG</button>
+            <button class="format-button" data-format="jpg">JPG</button>
+          </div>
+          <div class="result-label" style="margin-bottom: 4px;">File dimensions</div>
+          <div class="size-buttons" id="sizeButtons">
+            <!-- Size buttons will be added here dynamically -->
+          </div>
+          <button id="exportButton" style="width: 100%; margin-top: 16px;">Export image</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="copy-feedback hidden" id="copyFeedback">
+    Description copied!
+  </div>
+
+  <div id="exportScreen" class="screen">
+    <button id="backToHome" class="back-button">
+      <span class="material-icons-round">arrow_back</span>
+    </button>
+    <div class="header-image">
+      <img src="https://i.ibb.co/Q3LpLsCT/midip-A-single-hyper-realistic-angel-wing-floating-in-a-pitch-b-c2e53d90-3086-453a-97c7-ea641a02ca87.png" alt="Angel wing background">
+      <div class="header-content">
+        <h2>Export Image</h2>
+      </div>
+      <p>Configure your export settings.</p>
+    </div>
+
+    <div class="main-container">
+      <div id="dimensionsExport">
+        <div class="dimension-item" id="selectedFrame">
+          <span class="material-icons-round">crop_original</span>
+          <span><span class="dimension-label">Selected frame:</span> <span class="dimension-value">Frame name</span></span>
+        </div>
+        <div class="dimension-item" id="sizeExport">
+          <span class="material-icons-round">straighten</span>
+          <span><span class="dimension-label">Dimensions:</span> <span class="dimension-value">960x960px</span></span>
+        </div>
+        <div class="dimension-item" id="ratioExport">
+          <span class="material-icons-round">aspect_ratio</span>
+          <span><span class="dimension-label">Aspect Ratio:</span> <span class="dimension-value">1:1</span></span>
+        </div>
+      </div>
+
+      <div class="result-box" style="margin-top: 0;">
+        <div class="result-label">Set maximum file size</div>
+        <div class="info-line" style="display: flex; align-items: center; gap: 12px;">
+          <label for="maxSizeExport">Maximum size (MB)</label>
+          <input type="text" id="maxSizeExport" value="0.2" style="width: 80px;" pattern="[0-9]*[.]?[0-9]+" />
+        </div>
+      </div>
+
+      <div class="result-box">
+        <div class="result-label" style="margin-bottom: 4px;">File format</div>
+        <div class="format-buttons" id="formatButtonsExport">
+          <button class="format-button selected" data-format="webp">WEBP</button>
+          <button class="format-button" data-format="png">PNG</button>
+          <button class="format-button" data-format="jpg">JPG</button>
+        </div>
+        <div class="result-label" style="margin-bottom: 4px;">File dimensions</div>
+        <div class="size-buttons" id="sizeButtonsExport">
+          <!-- Size buttons will be added here dynamically -->
+        </div>
+        <button id="exportButtonSimple" style="width: 100%; margin-top: 16px;">Export image</button>
+      </div>
+    </div>
+  </div>
+
+  <button id="processNewImage" class="floating-process-button">Select new image</button>
+
+  <script>
+    let currentBlob = null;
+    let currentFileName = '';
+    let selectedSize = null;
+    let selectedFormat = 'webp'; // Formato padrão
+
+    // Configure input to use decimal point
+    const maxSizeInput = document.getElementById('maxSize');
+    
+    // Force the use of decimal point on initial load
+    maxSizeInput.value = "0.2";
+    
+    // Validate input to accept only numbers and point
+    maxSizeInput.addEventListener('input', function(e) {
+      let value = this.value;
+      
+      // Remove any character that is not a number or point
+      value = value.replace(/[^\d.]/g, '');
+      
+      // Ensure there is only one decimal point
+      const parts = value.split('.');
+      if (parts.length > 2) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+      }
+      
+      // Update the value
+      this.value = value;
+      
+      // Validate the numeric value only if there is a value
+      if (value !== '' && value !== '.') {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue)) {
+          // If the value is less than 0.1, adjust only when losing focus
+          if (numValue > 10) {
+            this.value = "10";
+          }
+        }
+      }
+    });
+
+    // Validate the minimum value only when the input loses focus
+    maxSizeInput.addEventListener('blur', function() {
+      const value = this.value;
+      if (value === '' || value === '.') {
+        this.value = "0.1";
+      } else {
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue) && numValue < 0.1) {
+          this.value = "0.1";
+        }
+      }
+    });
+
+    // Function to switch screens
+    function showScreen(screenId) {
+      // First, hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('visible');
+      });
+      
+      // Then show the target screen
+      const targetScreen = document.getElementById(screenId);
+      targetScreen.classList.add('visible');
+
+      // Show/hide process new image button based on screen
+      const processButton = document.getElementById('processNewImage');
+      if (screenId === 'exportScreen' || screenId === 'analysisScreen') {
+        processButton.classList.add('visible');
+      } else {
+        processButton.classList.remove('visible');
+      }
+
+      // Notify backend about screen change
+      let screen = 'home';
+      if (screenId === 'exportScreen') screen = 'export';
+      if (screenId === 'analysisScreen') screen = 'analyze';
+      parent.postMessage({ pluginMessage: { type: 'screen-changed', screen: screen } }, '*');
+    }
+
+    // Function to check selection
+    async function checkSelection() {
+      return new Promise((resolve) => {
+        parent.postMessage({ pluginMessage: { type: 'check-selection-only' } }, '*');
+        
+        window.addEventListener('message', function handler(event) {
+          const msg = event.data.pluginMessage;
+          if (msg && msg.type === 'selection-check-response') {
+            window.removeEventListener('message', handler);
+            if (!msg.valid) {
+              alert('Please select an image in Figma before proceeding.');
+              resolve(null);
+            } else {
+              // Request image binary data
+              parent.postMessage({ 
+                pluginMessage: { 
+                  type: 'get-image-data'
+                } 
+              }, '*');
+              
+              // Wait for image data
+              window.addEventListener('message', async function imageHandler(event) {
+                const imageMsg = event.data.pluginMessage;
+                if (imageMsg && imageMsg.type === 'image-data') {
+                  window.removeEventListener('message', imageHandler);
+                  
+                  try {
+                    // Process binary data
+                    const bytes = new Uint8Array(imageMsg.bytes);
+                    if (!bytes || bytes.length === 0) {
+                      throw new Error('Empty or invalid image data');
+                    }
+
+                    // Create Blob
+                    const blob = new Blob([bytes.buffer], { type: 'image/png' });
+                    if (!blob || blob.size === 0) {
+                      throw new Error('Failed to create image Blob');
+                    }
+
+                    // Store Blob globally
+                    currentBlob = blob;
+                    
+                    // Generate default filename based on dimensions
+                    const aspectRatio = msg.dimensions.aspectRatio.replace(':', 'x');
+                    currentFileName = `image-${aspectRatio}`;
+
+                    resolve(msg.dimensions);
+                  } catch (error) {
+                    console.error('Error processing image:', error);
+                    alert(`Error processing image: ${error.message}`);
+                    resolve(null);
+                  }
+                }
+              });
+            }
+          }
+        });
+      });
+    }
+
+    // Event for goToExport button
+    document.getElementById('goToExport').onclick = async () => {
+      const selection = await checkSelection();
+      if (!selection) return;
+      
+      // Transition to export screen
+      showScreen('exportScreen');
+      
+      // Update dimensions information
+      document.querySelector('#selectedFrame .dimension-value').textContent = selection.name;
+      document.querySelector('#sizeExport .dimension-value').textContent = `${selection.width}x${selection.height}px`;
+      document.querySelector('#ratioExport .dimension-value').textContent = selection.aspectRatio;
+      
+      const sizes = await generateSizes(selection.width, selection.height);
+      createSizeButtons(sizes, 'sizeButtonsExport', 'exportButtonSimple');
+
+      // Notify that the process is complete
+      parent.postMessage({ pluginMessage: { type: 'process-complete' } }, '*');
+    };
+
+    // Event for goToAnalyze button
+    document.getElementById('goToAnalyze').onclick = async () => {
+      const selection = await checkSelection();
+      if (!selection) return;
+
+      const apiKey = await getApiKey();
+      if (!apiKey) {
+        showScreen('authScreen');
+      } else {
+        showScreen('analysisScreen');
+        document.getElementById('analyze').click();
+      }
+    };
+
+    // Function to truncate the API key
+    function truncateApiKey(apiKey) {
+      if (!apiKey) return '';
+      return `OpenAI API Key: sk-...${apiKey.slice(-4)}`;
+    }
+
+    // Functions to manage the API key
+    async function saveApiKey(apiKey) {
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'save-api-key',
+          apiKey: apiKey
+        } 
+      }, '*');
+      const chip = document.querySelector('.api-key-chip');
+      chip.style.display = 'flex';
+      chip.querySelector('span.key-text').textContent = truncateApiKey(apiKey);
+    }
+
+    async function getApiKey() {
+      return new Promise((resolve) => {
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'get-api-key'
+          } 
+        }, '*');
+
+        window.addEventListener('message', function handler(event) {
+          const msg = event.data.pluginMessage;
+          if (msg && msg.type === 'api-key-response') {
+            window.removeEventListener('message', handler);
+            const chip = document.querySelector('.api-key-chip');
+            chip.style.display = msg.apiKey ? 'flex' : 'none';
+            if (msg.apiKey) {
+              chip.querySelector('span.key-text').textContent = truncateApiKey(msg.apiKey);
+            }
+            resolve(msg.apiKey);
+          }
+        });
+      });
+    }
+
+    // Load API key on start
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Hide the chip initially
+      document.querySelector('.api-key-chip').style.display = 'none';
+      
+      // Load the API key but do not change screens
+      const savedApiKey = await getApiKey();
+      if (savedApiKey) {
+        document.getElementById('apiKey').value = savedApiKey;
+      }
+
+      // Always show the home screen
+      showScreen('homeScreen');
+    });
+
+    // Event for continue button
+    document.getElementById('startAnalyze').onclick = async () => {
+      const apiKey = document.getElementById('apiKey').value;
+      if (!apiKey) {
+        alert('Please enter your OpenAI API key');
+        return;
+      }
+      await saveApiKey(apiKey);
+      showScreen('analysisScreen');
+    };
+
+    // Function to show analysis results
+    function showAnalysisResults() {
+      const container = document.getElementById('analysisContainer');
+      const analyzeButton = document.getElementById('analyze');
+      
+      // Hide the analyze button
+      if (analyzeButton) {
+        analyzeButton.style.display = 'none';
+      }
+      
+      // Show the analysis container
+      if (container) {
+        container.classList.remove('hidden');
+        setTimeout(() => {
+          container.classList.add('visible');
+        }, 100);
+      }
+    }
+
+    // Initial analyze button event
+    document.getElementById('analyze').onclick = async () => {
+      const analyzeButton = document.getElementById('analyze');
+      const analysisContainer = document.getElementById('analysisContainer');
+      
+      analyzeButton.style.display = 'none';
+      analysisContainer.classList.remove('visible');
+      analysisContainer.classList.add('hidden');
+      
+      const apiKey = await getApiKey();
+      if (!apiKey) {
+        analyzeButton.style.display = 'block';
+        alert('Please enter your OpenAI API key');
+        return;
+      }
+      
+      // Clear previous results
+      document.getElementById('imageDescription').textContent = 'Analyzing image...';
+      document.getElementById('filenameDisplay').textContent = 'Generating name...';
+      
+      // Show analysis container
+      analysisContainer.classList.remove('hidden');
+      setTimeout(() => {
+        analysisContainer.classList.add('visible');
+      }, 100);
+      
+      parent.postMessage({ pluginMessage: { 
+        type: 'check-selection',
+        apiKey: apiKey
+      } }, '*');
+    };
+
+    // Event for change API key button
+    document.getElementById('changeApiKey').onclick = () => {
+      if (confirm('Do you want to change your API key?')) {
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'remove-api-key'
+          } 
+        }, '*');
+        document.getElementById('apiKey').value = '';
+        document.querySelector('.api-key-chip').style.display = 'none';
+        showScreen('authScreen');
+      }
+    };
+
+    async function resizeImage(base64Image, maxWidth = 800) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = base64Image;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ratio = maxWidth / img.width;
+          canvas.width = maxWidth;
+          canvas.height = img.height * ratio;
+          
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+      });
+    }
+
+    async function analyzeImage(imageBase64, apiKey) {
+      try {
+        // Resize image before sending
+        const resizedImage = await resizeImage(imageBase64);
+        const base64Data = resizedImage.split(',')[1];
+        
+        console.log('Making API request...');
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4-turbo",
+            messages: [
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "text",
+                    text: "Answer in exactly two lines:\nFirst line: Short and objective description of the image (maximum 100 characters)\nSecond line: Start with 'Suggested file name:' followed by a descriptive name using only lowercase letters and underscores"
+                  },
+                  {
+                    type: "image_url",
+                    image_url: {
+                      url: `data:image/jpeg;base64,${base64Data}`
+                    }
+                  }
+                ]
+              }
+            ],
+            max_tokens: 150
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`API error: ${errorData.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        
+        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+          throw new Error('Invalid API response format');
+        }
+
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error('Full error:', error);
+        throw new Error(`Error analyzing image: ${error.message}`);
+      }
+    }
+
+    async function generateSizes(width, height) {
+      // Use original size as base (1x)
+      const baseWidth = Math.round(width);
+      const baseHeight = Math.round(height);
+
+      // Generate different sizes
+      return [
+        { scale: '1x', width: baseWidth, height: baseHeight },
+        { scale: '2x', width: baseWidth * 2, height: baseHeight * 2 },
+        { scale: '3x', width: baseWidth * 3, height: baseHeight * 3 },
+        { scale: '5x', width: baseWidth * 5, height: baseHeight * 5 },
+      ];
+    }
+
+    async function exportSize(size) {
+      // Notify start of export via Figma
+      parent.postMessage({ pluginMessage: { type: 'notify', message: 'Exporting image...' } }, '*');
+
+      try {
+        if (!currentBlob || !(currentBlob instanceof Blob)) {
+          throw new Error('Invalid image data');
+        }
+
+        // Load the original image
+        const img = new Image();
+        const loadPromise = new Promise((resolve, reject) => {
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error('Failed to load image'));
+        });
+
+        // Create temporary URL to load the image
+        const reader = new FileReader();
+        const readerPromise = new Promise((resolve) => {
+          reader.onloadend = () => resolve(reader.result);
+        });
+        reader.readAsDataURL(currentBlob);
+        const dataUrl = await readerPromise;
+        img.src = dataUrl;
+
+        try {
+          await loadPromise;
+        } catch (error) {
+          throw error;
+        }
+
+        // Create canvas with desired size
+        const canvas = document.createElement('canvas');
+        canvas.width = size.width;
+        canvas.height = size.height;
+        const ctx = canvas.getContext('2d');
+
+        // Draw the resized image
+        ctx.drawImage(img, 0, 0, size.width, size.height);
+
+        // Function to calculate size in MB
+        const getBlobSize = (blob) => blob.size / (1024 * 1024);
+
+        // Function to export with specific quality
+        const exportWithQuality = (quality) => {
+          return new Promise((resolve) => {
+            const mimeType = {
+              'webp': 'image/webp',
+              'png': 'image/png',
+              'jpg': 'image/jpeg'
+            }[selectedFormat];
+
+            canvas.toBlob(resolve, mimeType, quality);
+          });
+        };
+
+        // Find the best quality that meets the size limit
+        const maxSizeMB = parseFloat(document.getElementById('maxSize').value);
+        let bestBlob = null;
+        let bestQuality = 0.1;
+
+        if (selectedFormat === 'png') {
+          // For PNG, always use maximum quality
+          bestBlob = await exportWithQuality(1.0);
+        } else {
+          // For other formats, perform binary search
+          let minQuality = 0.1;
+          let maxQuality = 1.0;
+
+          while (maxQuality - minQuality > 0.01) {
+            const currentQuality = (minQuality + maxQuality) / 2;
+            const blob = await exportWithQuality(currentQuality);
+            const sizeMB = getBlobSize(blob);
+
+            if (sizeMB <= maxSizeMB) {
+              bestBlob = blob;
+              bestQuality = currentQuality;
+              minQuality = currentQuality;
+            } else {
+              maxQuality = currentQuality;
+            }
+          }
+
+          // If no valid blob was found, use the lowest quality
+          if (!bestBlob) {
+            bestBlob = await exportWithQuality(0.1);
+          }
+        }
+
+        // Create download link
+        const downloadUrl = URL.createObjectURL(bestBlob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `${currentFileName}.${selectedFormat}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(downloadUrl);
+
+        // Log the result
+        const finalSize = getBlobSize(bestBlob).toFixed(2);
+        console.log(`Exported with ${selectedFormat.toUpperCase()}, size: ${finalSize}MB${selectedFormat !== 'png' ? `, quality: ${bestQuality.toFixed(2)}` : ''}`);
+
+        // Notify success via Figma
+        parent.postMessage({ pluginMessage: { type: 'notify', message: 'Image exported successfully!' } }, '*');
+
+      } catch (error) {
+        console.error('Export error:', error);
+        // Notify error via Figma
+        parent.postMessage({ pluginMessage: { type: 'notify', message: `Error exporting image: ${error.message}`, error: true } }, '*');
+      }
+    }
+
+    function createSizeButtons(sizes, containerId = 'sizeButtons', exportButtonId = 'exportButton') {
+      const container = document.getElementById(containerId);
+      const exportButton = document.getElementById(exportButtonId);
+      
+      if (!container || !exportButton) {
+        console.error('Container or export button not found');
+        return;
+      }
+      
+      // Disable export button initially
+      exportButton.classList.remove('enabled');
+      exportButton.style.opacity = '0.5';
+      exportButton.style.pointerEvents = 'none';
+      
+      container.innerHTML = '';
+      selectedSize = null;
+
+      sizes.forEach(size => {
+        const button = document.createElement('button');
+        button.className = 'size-button';
+        
+        const scale = document.createElement('span');
+        scale.className = 'scale';
+        scale.textContent = size.scale;
+        
+        const dimensions = document.createElement('span');
+        dimensions.className = 'dimensions';
+        dimensions.textContent = `${size.width}x${size.height}`;
+        
+        button.appendChild(scale);
+        button.appendChild(dimensions);
+        
+        button.onclick = () => {
+          // Remove selection from all buttons in the same container
+          container.querySelectorAll('.size-button').forEach(btn => {
+            btn.classList.remove('selected');
+          });
+          // Add selection to clicked button
+          button.classList.add('selected');
+          // Store selected size
+          selectedSize = size;
+          // Enable export button
+          exportButton.classList.add('enabled');
+          exportButton.style.opacity = '1';
+          exportButton.style.pointerEvents = 'all';
+        };
+        
+        container.appendChild(button);
+      });
+
+      document.getElementById('exportOptions').style.display = 'block';
+      
+      // Add event to export button
+      exportButton.onclick = () => {
+        if (!selectedSize) {
+          alert('Please select a size before exporting');
+          return;
+        }
+        exportSize(selectedSize);
+      };
+    }
+
+    onmessage = async (event) => {
+      const msg = event.data.pluginMessage;
+      
+      if (msg.type === 'selection-check-response') {
+        if (msg.valid) {
+          // Update dimensions information
+          document.querySelector('#selectedFrame .dimension-value').textContent = msg.dimensions.name;
+          document.querySelector('#selectedFrameAnalysis .dimension-value').textContent = msg.dimensions.name;
+          document.querySelector('#sizeExport .dimension-value').textContent = `${msg.dimensions.width}x${msg.dimensions.height}px`;
+          document.querySelector('#ratioExport .dimension-value').textContent = msg.dimensions.aspectRatio;
+          
+          const sizes = await generateSizes(msg.dimensions.width, msg.dimensions.height);
+          createSizeButtons(sizes, 'sizeButtonsExport', 'exportButtonSimple');
+        }
+        return;
+      }
+      
+      if (msg.type === 'no-selection') {
+        const analyzeButton = document.getElementById('analyze');
+        if (analyzeButton.style.display === 'none') {
+          analyzeButton.style.display = 'block';
+        }
+        alert('Please select an image in Figma before analyzing.');
+        return;
+      }
+      
+      if (msg.type === 'analyze-image') {
+        try {
+          // Create Blob from binary data
+          const bytes = new Uint8Array(msg.bytes);
+          
+          // Check if data is valid
+          if (!bytes || bytes.length === 0) {
+            throw new Error('Empty or invalid image data');
+          }
+
+          // Create Blob with correct type
+          const blob = new Blob([bytes.buffer], { type: 'image/png' });
+          
+          // Check if Blob was created correctly
+          if (!blob || blob.size === 0) {
+            throw new Error('Failed to create image Blob');
+          }
+
+          // Store Blob globally
+          currentBlob = blob;
+
+          console.log('Image data received:', {
+            bytesLength: bytes.length,
+            blobSize: blob.size,
+            blobType: blob.type
+          });
+
+          // Load image to verify if it's valid
+          const img = new Image();
+          const loadPromise = new Promise((resolve, reject) => {
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error('Failed to load image'));
+          });
+
+          // Create temporary URL to load image
+          const url = URL.createObjectURL(blob);
+          img.src = url;
+
+          try {
+            await loadPromise;
+            URL.revokeObjectURL(url);
+          } catch (error) {
+            URL.revokeObjectURL(url);
+            throw error;
+          }
+
+          const sizeValueSpan = document.querySelector('#size .dimension-value');
+          const ratioValueSpan = document.querySelector('#ratio .dimension-value');
+          const selectedFrameSpan = document.querySelector('#selectedFrameAnalysis .dimension-value');
+          const descriptionDiv = document.getElementById('imageDescription');
+          const suggestedNameDiv = document.getElementById('suggestedName');
+          
+          sizeValueSpan.textContent = `${msg.dimensions.width}x${msg.dimensions.height}px`;
+          ratioValueSpan.textContent = msg.dimensions.aspectRatio;
+          selectedFrameSpan.textContent = msg.dimensions.name;
+
+          // Convert to base64 for analysis
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            try {
+              descriptionDiv.textContent = "Analyzing image...";
+              document.getElementById('filenameDisplay').textContent = "Generating name...";
+              
+              const response = await analyzeImage(reader.result, msg.apiKey);
+              
+              if (!response) {
+                throw new Error('Could not generate image description');
+              }
+
+              const parts = response.split('\n');
+              const description = parts[0];
+              let suggestedName = parts[1] || '';
+              
+              descriptionDiv.textContent = description;
+              
+              if (!suggestedName.includes('Suggested file name:')) {
+                suggestedName = description;
+              }
+              
+              const aspectRatio = msg.dimensions.aspectRatio.replace(':', 'x');
+              
+              const baseFileName = suggestedName
+                .replace('Suggested file name:', '')
+                .trim()
+                .toLowerCase()
+                .replace(/["']/g, '')
+                .replace(/[^a-z0-9]/g, '_')
+                .replace(/_+/g, '_')
+                .replace(/^_|_$/g, '');
+
+              const finalBaseFileName = baseFileName || 'image';
+              currentFileName = `${finalBaseFileName}-${aspectRatio}`;
+              suggestedNameDiv.value = finalBaseFileName;
+              document.getElementById('filenameDisplay').textContent = finalBaseFileName;
+
+              const sizes = await generateSizes(msg.dimensions.width, msg.dimensions.height);
+              createSizeButtons(sizes);
+
+              showAnalysisResults();
+
+            } catch (error) {
+              console.error('Analysis error:', error);
+              descriptionDiv.textContent = `Error analyzing image: ${error.message}`;
+              document.getElementById('filenameDisplay').textContent = 'Error generating name';
+              showAnalysisResults();
+            }
+          };
+
+          reader.onerror = (error) => {
+            console.error('Read error:', error);
+            descriptionDiv.textContent = `Error reading image: ${error.message}`;
+            document.getElementById('filenameDisplay').textContent = 'Error reading image';
+            showAnalysisResults();
+          };
+
+          reader.readAsDataURL(currentBlob);
+
+        } catch (error) {
+          console.error('Conversion error:', error);
+          const descriptionDiv = document.getElementById('imageDescription');
+          document.getElementById('filenameDisplay').textContent = 'Conversion error';
+          descriptionDiv.textContent = `Conversion error: ${error.message}`;
+          showAnalysisResults();
+        }
+      }
+      
+      if (msg.type === 'analyze-error') {
+        const descriptionDiv = document.getElementById('imageDescription');
+        const filenameDisplay = document.getElementById('filenameDisplay');
+        
+        descriptionDiv.textContent = `Error: ${msg.error}`;
+        filenameDisplay.textContent = 'Error analyzing image';
+        
+        showAnalysisResults();
+        return;
+      }
+    };
+
+    document.getElementById('copyIcon').onclick = () => {
+      const description = document.getElementById('imageDescription').textContent;
+      const textArea = document.createElement('textarea');
+      textArea.value = description;
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        const copyFeedback = document.getElementById('copyFeedback');
+        copyFeedback.classList.remove('hidden');
+        copyFeedback.classList.add('visible');
+        setTimeout(() => {
+          copyFeedback.classList.remove('visible');
+          setTimeout(() => {
+            copyFeedback.classList.add('hidden');
+          }, 200);
+        }, 2000);
+      } catch (err) {
+        console.error('Error copying:', err);
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    };
+
+    // Function to update the filename with the correct extension
+    function updateFilenameWithExtension(name) {
+      const displayName = `${name}.${selectedFormat}`;
+      filenameDisplay.textContent = displayName;
+      currentFileName = name;
+    }
+
+    // Add events to format buttons
+    document.querySelectorAll('.format-button').forEach(button => {
+      button.onclick = () => {
+        // Remove selection from all buttons
+        document.querySelectorAll('.format-button').forEach(btn => {
+          btn.classList.remove('selected');
+        });
+        // Add selection to clicked button
+        button.classList.add('selected');
+        // Store selected format
+        selectedFormat = button.dataset.format;
+        // Update the filename with the new extension
+        updateFilenameWithExtension(currentFileName);
+      };
+    });
+
+    // Manage filename editing
+    const filenameContainer = document.querySelector('.filename-container');
+    const filenameDisplay = document.getElementById('filenameDisplay');
+    const filenameEdit = document.getElementById('suggestedName');
+    const editIcon = document.getElementById('editIcon');
+    const editIconSpan = editIcon.querySelector('.material-icons-round');
+
+    editIcon.onclick = () => {
+      if (filenameContainer.classList.contains('edit-mode')) {
+        // Saving the edit
+        const newName = filenameEdit.value.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+        updateFilenameWithExtension(newName);
+        filenameContainer.classList.remove('edit-mode');
+        editIconSpan.textContent = 'edit';
+      } else {
+        // Entering edit mode
+        filenameEdit.value = currentFileName;
+        filenameContainer.classList.add('edit-mode');
+        editIconSpan.textContent = 'check';
+        filenameEdit.focus();
+      }
+    };
+
+    filenameEdit.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        editIcon.click(); // This will save the edit
+      } else if (e.key === 'Escape') {
+        filenameContainer.classList.remove('edit-mode');
+        editIconSpan.textContent = 'edit';
+      }
+    };
+
+    // Function to show/hide the loader with message
+    function toggleLoader(show, message = '') {
+      const loader = document.getElementById('loaderContainer');
+      const messageEl = loader.querySelector('.message');
+      messageEl.textContent = message;
+
+      if (show) {
+        loader.style.display = 'flex';
+        loader.classList.remove('hidden');
+        // Force reflow to ensure transition works
+        loader.offsetHeight;
+      } else {
+        loader.classList.add('hidden');
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 200);
+      }
+    }
+
+    // Remove all elements and styles related to the loader
+    document.querySelector('.initial-loader')?.remove();
+    document.querySelector('.loader-container')?.remove();
+
+    document.querySelectorAll('.back-button').forEach(button => {
+      button.onclick = () => {
+        showScreen('homeScreen');
+        // Notify backend that we returned to home screen
+        parent.postMessage({ pluginMessage: { type: 'back-to-home' } }, '*');
+      };
+    });
+
+    // Process new image button functionality
+    document.getElementById('processNewImage').onclick = async () => {
+      const selection = await checkSelection();
+      if (!selection) return;
+
+      // Get current screen
+      const exportScreen = document.getElementById('exportScreen');
+      const analysisScreen = document.getElementById('analysisScreen');
+
+      if (exportScreen.classList.contains('visible')) {
+        // Update export screen
+        document.querySelector('#selectedFrame .dimension-value').textContent = selection.name;
+        document.querySelector('#sizeExport .dimension-value').textContent = `${selection.width}x${selection.height}px`;
+        document.querySelector('#ratioExport .dimension-value').textContent = selection.aspectRatio;
+        
+        const sizes = await generateSizes(selection.width, selection.height);
+        createSizeButtons(sizes, 'sizeButtonsExport', 'exportButtonSimple');
+      } else if (analysisScreen.classList.contains('visible')) {
+        // Update analysis screen
+        document.getElementById('analyze').click();
+      }
+    };
+  </script>
+</body>
+</html>
