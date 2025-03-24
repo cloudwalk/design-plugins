@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #404040;
+      --primary-hover: #666666;
+      --bg-color: #000000;
+      --text-color: #FFFFFF;
+      --text-secondary: #999999;
+      --border-color: #333333;
+      --input-bg: #1A1A1A;
+      --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      --result-box-bg: #1A1A1A;
+      --hover-bg: #262626;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 0;
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    .header {
+      padding: 24px 24px 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.2;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .version {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-left: 8px;
+      font-weight: normal;
+    }
+
+    .plugin-description {
+      margin: 8px 0 0 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .template-bar {
+      display: flex;
+      flex-direction: column;
+      padding: 16px 24px 0 24px;
+      gap: 12px;
+      border-bottom: none;
+    }
+    
+    .template-select-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .template-select {
+      flex: 1;
+    }
+
+    select {
+      width: 100%;
+      height: 40px;
+      padding: 0 32px 0 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-color);
+      font-size: 14px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 16px;
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: var(--text-color);
+    }
+
+    .template-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .template-button {
+      flex: 1;
+    }
+
+    .button-primary, .button-secondary {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-primary {
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 8px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .button-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .button-secondary {
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 8px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .button-secondary:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--text-color);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0 24px;
+    }
+
+    .main-box {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin: 16px 0;
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .box-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .box-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .box-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .box-content {
+      flex: 1;
+      padding: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .page-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      margin-bottom: 8px;
+      position: relative;
+      margin-right: 8px;
+    }
+
+    .drag-handle {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: grab;
+      color: var(--text-color);
+      font-size: 18px;
+    }
+
+    .drag-handle:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--text-color);
+    }
+
+    .page-input, .separator {
+      flex: 1;
+      height: 40px;
+      padding: 0 48px 0 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    .delete-button {
+      position: absolute;
+      right: 4px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .delete-button:hover {
+      color: #FF4444;
+      background: transparent;
+    }
+
+    .footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 16px;
+      margin-top: auto;
+    }
+
+    .footer-button {
+      flex: 1;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal {
+      background: var(--bg-color);
+      padding: 24px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .modal h3 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .modal input {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .default-template {
+      color: #18A0FB;
+    }
+
+    /* Estilizar a barra de rolagem */
+    .page-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .page-list::-webkit-scrollbar-track {
+      background: var(--bg-color);
+      border-radius: 4px;
+    }
+    
+    .page-list::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    
+    .page-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
+    .separator {
+      flex: 1;
+      height: 40px;
+      padding: 0 48px 0 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    
+    .separator::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 48px;
+      height: 1px;
+      background-color: var(--text-secondary);
+    }
+
+    .template-preview {
+      margin-top: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      background-color: var(--input-bg);
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+    
+    .template-preview-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }
+    
+    .preview-page {
+      display: flex;
+      align-items: center;
+      padding: 4px 0;
+      margin-bottom: 4px;
+    }
+    
+    .preview-page-icon {
+      width: 24px;
+      margin-right: 8px;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    
+    .preview-page-name {
+      font-size: 13px;
+      color: var(--text-color);
+    }
+    
+    .preview-separator {
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 8px 0;
+    }
+
+    /* Estilos para o modo de prévia */
+    .page-list.preview-mode .page-item {
+      opacity: 0.7;
+    }
+    
+    .page-list.preview-mode .drag-handle {
+      cursor: default;
+      opacity: 0.5;
+    }
+    
+    /* Estilo para o botão de exclusão na prévia */
+    .delete-preview-button {
+      background-color: transparent;
+      border: none;
+      color: #FF4444;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+      margin-right: auto; /* Empurra para a esquerda */
+    }
+    
+    .delete-preview-button:hover {
+      text-decoration: underline;
+    }
+    
+    .preview-notice {
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0 16px; /* Espaçamento lateral de 16px */
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Espaçamento igual entre os elementos */
+      height: 48px; /* Altura fixa */
+    }
+    
+    .preview-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .preview-actions {
+      display: flex;
+      gap: 16px; /* Espaçamento entre os botões */
+    }
+
+    /* Estilo para o ícone SVG */
+    .trash-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Estilo para botão desativado */
+    .button-disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    
+    /* Estilo para o ícone de saída */
+    .exit-icon {
+      fill: currentColor;
+    }
+
+    /* Estilo para o botão de exclusão de template */
+    #deleteTemplateBtn {
+      background-color: transparent;
+      border: none;
+      color: #FF4444;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: all 0.2s;
+    }
+    
+    #deleteTemplateBtn:hover {
+      background-color: rgba(255, 68, 68, 0.1);
+      opacity: 1;
+    }
+    
+    #deleteTemplateBtn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    
+    #deleteTemplateBtn .trash-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Estilo para o botão de saída na prévia */
+    .preview-notice-button {
+      background-color: transparent;
+      border: none;
+      color: #18A0FB; /* Azul */
+      cursor: pointer;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* Estilo específico para o ícone de saída */
+    .preview-notice-button img {
+      margin-left: 8px; /* Aumentar o espaçamento para 8px */
+      width: 14px;
+      height: 14px;
+    }
+    
+    .preview-notice {
+      display: flex;
+      justify-content: space-between; /* Espaçamento entre os elementos */
+      align-items: center;
+    }
+    
+    .exit-icon {
+      fill: #18A0FB; /* Ícone azul */
+    }
+
+    /* Estilo para o label do template */
+    .template-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-color);
+      margin-bottom: 8px;
+    }
+
+    /* Estilo para o modal de substituição de template */
+    #replaceTemplateModal .modal-content {
+      text-align: center;
+    }
+    
+    .modal-warning {
+      color: #FF4444;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    /* Estilo para os botões do modal de substituição */
+    #replaceTemplateModal .modal-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center; /* Centralizar os botões */
+      margin-top: 24px; /* Adicionar espaço entre o texto e os botões */
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Structura <span class="version">v1.0.0</span></h1>
+    <p class="plugin-description">Effortlessly organize and standardize your Figma files with reusable page templates.</p>
+  </div>
+
+  <div class="template-bar">
+    <div class="template-label">Select template:</div>
+    <div class="template-select-container">
+      <div class="template-select">
+        <select id="templateSelect">
+          <option value="">Select a template...</option>
+        </select>
+      </div>
+      <button id="deleteTemplateBtn" disabled>
+        <svg class="trash-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="main-box">
+      <div class="box-header">
+        <h2 class="box-title">Pages</h2>
+        <div class="box-actions">
+          <button id="createPage" class="button-secondary">Add page</button>
+          <button id="createSeparator" class="button-secondary">Add divider</button>
+        </div>
+      </div>
+      
+      <div class="box-content">
+        <div id="pageList" class="page-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button id="applyTemplate" class="button-primary footer-button">Apply Template</button>
+    <button id="quickSaveTemplate" class="button-secondary footer-button">Save Template</button>
+  </div>
+
+  <div class="modal-overlay" id="templateNameModal">
+    <div class="modal">
+      <h3>Save as template</h3>
+      <input type="text" id="templateNameInput" placeholder="Enter template name" class="page-input">
+      <div class="modal-buttons">
+        <button class="button-secondary" onclick="cancelSaveTemplate()">Cancel</button>
+        <button class="button-primary" onclick="confirmSaveTemplate()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmação para substituir template -->
+  <div class="modal-overlay" id="replaceTemplateModal">
+    <div class="modal">
+      <div class="modal-content">
+        <h3>Replace Existing Template</h3>
+        <p>A template named "<span id="duplicateTemplateName"></span>" already exists.</p>
+        <p>Would you like to replace it with your current configuration?</p>
+        <p class="modal-warning">This action cannot be undone.</p>
+      </div>
+      <div class="modal-buttons">
+        <button id="cancelReplaceTemplate" class="button-secondary">Cancel</button>
+        <button id="confirmReplaceTemplate" class="button-primary">Replace</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pageList = document.getElementById('pageList');
+    
+    document.getElementById('createPage').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'create-page' } }, '*');
+    };
+    
+    document.getElementById('createSeparator').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'create-separator' } }, '*');
+    };
+    
+    function renderPages(pages) {
+      pageList.innerHTML = pages.map((item, index) => `
+        <div class="page-item">
+          <div class="drag-handle" draggable="true" data-index="${index}">⋮</div>
+          ${item.type === 'separator' 
+            ? `<div class="separator"></div>`
+            : `<input class="page-input" value="${item.name}" data-index="${index}">`
+          }
+          <button class="delete-button" data-index="${index}">
+            <svg class="trash-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z"/>
+            </svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Event delegation para melhor performance
+    pageList.addEventListener('change', (e) => {
+      if (e.target.classList.contains('page-input')) {
+        parent.postMessage({
+          pluginMessage: {
+            type: 'rename-page',
+            index: parseInt(e.target.dataset.index),
+            name: e.target.value
+          }
+        }, '*');
+      }
+    });
+
+    let draggedIndex = null;
+
+    pageList.addEventListener('dragstart', (e) => {
+      if (e.target.classList.contains('drag-handle')) {
+        draggedIndex = parseInt(e.target.dataset.index);
+        e.dataTransfer.setData('text/plain', '');
+      }
+    });
+
+    pageList.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const pageItem = e.target.closest('.page-item');
+      const rect = pageItem ? pageItem.getBoundingClientRect() : null;
+      
+      // Se o mouse estiver na metade inferior do item, inserir abaixo
+      if (rect && e.clientY > rect.top + rect.height / 2) {
+        pageItem.style.borderBottom = '2px solid #18A0FB';
+        pageItem.style.borderTop = '';
+      } else if (rect) {
+        pageItem.style.borderTop = '2px solid #18A0FB';
+        pageItem.style.borderBottom = '';
+      }
+    });
+
+    pageList.addEventListener('dragleave', (e) => {
+      const pageItem = e.target.closest('.page-item');
+      if (pageItem) {
+        pageItem.style.borderTop = '';
+        pageItem.style.borderBottom = '';
+      }
+    });
+
+    pageList.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (draggedIndex === null) return;
+
+      const pageItems = Array.from(pageList.children);
+      const target = e.target.closest('.page-item');
+      
+      let toIndex = pageItems.length;
+      
+      if (target) {
+        toIndex = pageItems.indexOf(target);
+        const rect = target.getBoundingClientRect();
+        if (e.clientY > rect.top + rect.height / 2) {
+          toIndex++;
+        }
+      }
+
+      if (draggedIndex !== toIndex) {
+        parent.postMessage({
+          pluginMessage: {
+            type: 'reorder-pages',
+            fromIndex: draggedIndex,
+            toIndex
+          }
+        }, '*');
+      }
+
+      pageItems.forEach(item => {
+        item.style.borderTop = '';
+        item.style.borderBottom = '';
+      });
+      
+      draggedIndex = null;
+    });
+
+    window.onmessage = (event) => {
+      const message = event.data.pluginMessage;
+      
+      if (message.type === 'update-pages') {
+        // Só renderizar as páginas se não estiver no modo de prévia
+        if (!pageList.classList.contains('preview-mode')) {
+          renderPages(message.pages);
+        }
+      }
+      
+      if (message.type === 'templates-loaded') {
+        const select = document.getElementById('templateSelect');
+        select.innerHTML = '<option value="">Select a template...</option>';
+        
+        // Armazenar os templates para uso na prévia
+        window.templatesData = message.templates;
+        window.defaultTemplatesCount = message.defaultTemplatesCount;
+        
+        message.templates.forEach((template, index) => {
+          const option = document.createElement('option');
+          option.value = index;
+          
+          // Adicionar indicador para templates padrão
+          if (index < message.defaultTemplatesCount) {
+            option.textContent = `${template.name} (Default)`;
+            option.classList.add('default-template');
+          } else {
+            option.textContent = template.name;
+          }
+          
+          select.appendChild(option);
+        });
+        
+        // Atualizar o estado do botão após carregar os templates
+        updateApplyButtonState();
+      }
+      
+      if (message.type === 'template-saved') {
+        // Atualizar a seleção para o novo template
+        if (message.newTemplateIndex !== undefined) {
+          document.getElementById('templateSelect').value = message.newTemplateIndex;
+          updateApplyButtonState();
+        }
+      }
+      
+      if (message.type === 'template-duplicate') {
+        // Armazenar o template e o índice
+        templateToReplace = message.template;
+        existingTemplateIndex = message.existingIndex;
+        
+        // Mostrar o modal de confirmação
+        document.getElementById('duplicateTemplateName').textContent = templateToReplace.name;
+        document.getElementById('replaceTemplateModal').style.display = 'flex';
+      }
+    };
+
+    // Verificar a função que obtém a configuração das páginas
+    function getAllPagesConfig() {
+      const pageItems = Array.from(pageList.querySelectorAll('.page-item'));
+      return pageItems.map(item => {
+        const input = item.querySelector('.page-input');
+        const separator = item.querySelector('.separator');
+        
+        if (separator) {
+          return {
+            name: '---',
+            type: 'separator'
+          };
+        } else if (input) {
+          return {
+            name: input.value,
+            type: 'page'
+          };
+        }
+      }).filter(Boolean); // Remover itens undefined
+    }
+
+    function loadTemplates() {
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'get-templates' 
+        }
+      }, '*');
+    }
+
+    // Verificar a função que salva o template atual
+    function confirmSaveTemplate() {
+      const templateName = document.getElementById('templateNameInput').value.trim();
+      if (!templateName) {
+        alert("Please enter a template name");
+        return;
+      }
+      
+      const pages = getAllPagesConfig();
+      if (!pages || pages.length === 0) {
+        alert("No pages to save in template");
+        return;
+      }
+      
+      const template = {
+        name: templateName,
+        pages: pages
+      };
+      
+      console.log("Saving template:", template);
+      
+      parent.postMessage({ 
+        pluginMessage: {
+          type: 'save-template',
+          template
+        }
+      }, '*');
+      
+      // Limpar e fechar o modal
+      cancelSaveTemplate();
+    }
+
+    function cancelSaveTemplate() {
+      document.getElementById('templateNameModal').style.display = 'none';
+      document.getElementById('templateNameInput').value = '';
+    }
+
+    function applySelectedTemplate() {
+      const select = document.getElementById('templateSelect');
+      if (!select.value) return;
+      
+      parent.postMessage({ 
+        pluginMessage: {
+          type: 'apply-template',
+          templateIndex: parseInt(select.value)
+        }
+      }, '*');
+      
+      // Sair do modo de prévia após aplicar o template
+      exitPreviewMode();
+      
+      // Limpar a seleção do dropdown
+      select.value = '';
+    }
+
+    // Event Listeners
+    document.getElementById('quickSaveTemplate').addEventListener('click', saveCurrentAsTemplate);
+    document.getElementById('applyTemplate').addEventListener('click', applySelectedTemplate);
+
+    // Carregar templates ao iniciar
+    loadTemplates();
+
+    // Adicionar código para alternar entre abas
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        button.classList.add('active');
+        const tabContent = document.getElementById(button.dataset.tab);
+        tabContent.classList.add('active');
+        
+        // Carregar templates ao abrir a aba de templates
+        if (button.dataset.tab === 'templates') {
+          loadTemplates();
+        }
+      });
+    });
+
+    // Corrigir o handler para deletar páginas
+    pageList.addEventListener('click', (e) => {
+      // Verificar se o clique foi no botão ou em algum elemento dentro do botão (como o SVG)
+      const deleteButton = e.target.closest('.delete-button');
+      if (deleteButton) {
+        const index = parseInt(deleteButton.dataset.index);
+        parent.postMessage({
+          pluginMessage: {
+            type: 'delete-page',
+            index
+          }
+        }, '*');
+      }
+    });
+
+    // Adicionar função para atualizar o estado do botão Apply Template
+    function updateApplyButtonState() {
+      const select = document.getElementById('templateSelect');
+      const applyButton = document.getElementById('applyTemplate');
+      
+      if (!select.value) {
+        applyButton.disabled = true;
+        applyButton.classList.add('button-disabled');
+      } else {
+        applyButton.disabled = false;
+        applyButton.classList.remove('button-disabled');
+      }
+    }
+    
+    // Chamar a função quando a página carrega
+    updateApplyButtonState();
+    
+    // Atualizar o evento de seleção de template
+    document.getElementById('templateSelect').addEventListener('change', function() {
+      const selectedIndex = this.value;
+      const deleteBtn = document.getElementById('deleteTemplateBtn');
+      
+      // Atualizar o estado do botão Apply Template
+      updateApplyButtonState();
+      
+      // Atualizar o estado do botão Delete Template
+      if (selectedIndex && parseInt(selectedIndex) >= window.defaultTemplatesCount) {
+        deleteBtn.disabled = false; // Ativar para templates do usuário
+      } else {
+        deleteBtn.disabled = true; // Desativar para templates padrão ou nenhuma seleção
+      }
+      
+      if (!selectedIndex) {
+        // Remover prévia e mostrar páginas reais
+        exitPreviewMode();
+        return;
+      }
+      
+      // Mostrar a prévia do template
+      showTemplatePreview(parseInt(selectedIndex));
+    });
+    
+    function exitPreviewMode() {
+      pageList.classList.remove('preview-mode');
+      
+      // Solicitar as páginas reais novamente
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'get-pages' 
+        }
+      }, '*');
+      
+      // Atualizar o estado do botão
+      updateApplyButtonState();
+    }
+
+    // Função para excluir template
+    function deleteTemplate(templateIndex) {
+      parent.postMessage({
+        pluginMessage: {
+          type: 'delete-template',
+          templateIndex
+        }
+      }, '*');
+    }
+
+    // Adicionar a função saveCurrentAsTemplate que estava faltando
+    function saveCurrentAsTemplate() {
+      document.getElementById('templateNameModal').style.display = 'flex';
+      document.getElementById('templateNameInput').focus();
+    }
+    
+    // Adicionar handler para Enter no input
+    document.getElementById('templateNameInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        confirmSaveTemplate();
+      }
+    });
+
+    // Adicionar a função showTemplatePreview que foi removida
+    function showTemplatePreview(templateIndex) {
+      // Obter o template selecionado
+      const templates = window.templatesData || [];
+      const template = templates[templateIndex];
+      
+      if (!template) {
+        exitPreviewMode();
+        return;
+      }
+      
+      // Verificar se é um template do usuário (não padrão)
+      const isUserTemplate = templateIndex >= window.defaultTemplatesCount;
+      
+      // Adicionar aviso de prévia
+      const previewNotice = document.createElement('div');
+      previewNotice.className = 'preview-notice';
+      
+      // Texto de prévia (sempre à esquerda)
+      const previewLabel = document.createElement('span');
+      previewLabel.className = 'preview-label';
+      previewLabel.textContent = 'Preview';
+      previewNotice.appendChild(previewLabel);
+      
+      // Adicionar botão de saída com ícone à direita
+      const exitButton = document.createElement('button');
+      exitButton.className = 'preview-notice-button';
+      exitButton.id = 'exitPreviewButton';
+      exitButton.innerHTML = `
+        Exit
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 8px;">
+          <path d="M7 5.58599L11.95 0.635986L13.364 2.04999L8.414 6.99999L13.364 11.95L11.95 13.364L7 8.41399L2.05 13.364L0.636002 11.95L5.586 6.99999L0.636002 2.04999L2.05 0.635986L7 5.58599Z" fill="#18A0FB"/>
+        </svg>
+      `;
+      previewNotice.appendChild(exitButton);
+      
+      // Renderizar as páginas do template como prévia
+      pageList.innerHTML = '';
+      pageList.appendChild(previewNotice);
+      pageList.classList.add('preview-mode');
+      
+      // Renderizar as páginas do template
+      template.pages.forEach((page, index) => {
+        const pageItem = document.createElement('div');
+        pageItem.className = 'page-item';
+        
+        const dragHandle = document.createElement('div');
+        dragHandle.className = 'drag-handle';
+        dragHandle.textContent = '⋮';
+        
+        if (page.type === 'separator') {
+          const separator = document.createElement('div');
+          separator.className = 'separator';
+          pageItem.appendChild(dragHandle);
+          pageItem.appendChild(separator);
+        } else {
+          const input = document.createElement('input');
+          input.className = 'page-input';
+          input.value = page.name;
+          input.readOnly = true;
+          pageItem.appendChild(dragHandle);
+          pageItem.appendChild(input);
+        }
+        
+        pageList.appendChild(pageItem);
+      });
+      
+      // Adicionar evento para sair da prévia
+      document.getElementById('exitPreviewButton').addEventListener('click', exitPreviewMode);
+    }
+
+    // Adicionar evento de clique para o botão de exclusão
+    document.getElementById('deleteTemplateBtn').addEventListener('click', function() {
+      const select = document.getElementById('templateSelect');
+      const selectedIndex = parseInt(select.value);
+      const templates = window.templatesData || [];
+      
+      if (selectedIndex >= 0 && selectedIndex < templates.length) {
+        const template = templates[selectedIndex];
+        
+        if (confirm(`Are you sure you want to delete "${template.name}"? This action cannot be undone.`)) {
+          deleteTemplate(selectedIndex);
+          select.value = '';
+          this.disabled = true;
+          exitPreviewMode();
+        }
+      }
+    });
+
+    // Variáveis para armazenar o template a ser substituído
+    let templateToReplace = null;
+    let existingTemplateIndex = -1;
+    
+    // Adicionar event listeners para os botões do modal
+    document.getElementById('cancelReplaceTemplate').addEventListener('click', () => {
+      document.getElementById('replaceTemplateModal').style.display = 'none';
+      templateToReplace = null;
+      existingTemplateIndex = -1;
+    });
+    
+    document.getElementById('confirmReplaceTemplate').addEventListener('click', () => {
+      if (templateToReplace && existingTemplateIndex >= 0) {
+        // Enviar mensagem para substituir o template
+        parent.postMessage({
+          pluginMessage: {
+            type: 'replace-template',
+            template: templateToReplace,
+            index: existingTemplateIndex
+          }
+        }, '*');
+        
+        // Fechar o modal
+        document.getElementById('replaceTemplateModal').style.display = 'none';
+        templateToReplace = null;
+        existingTemplateIndex = -1;
+      }
+    });
+  </script>
+</body>
+</html> 
