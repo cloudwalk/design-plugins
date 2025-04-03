@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0D0D0D;
+      --bg-secondary: #1A1A1A;
+      --bg-tertiary: #262626;
+      --text-primary: #E0E0E0;
+      --text-secondary: #B0B0B0;
+      --accent-color: #FFFFFF;
+      --border-color: #333333;
+      --padding: clamp(16px, 5%, 24px);
+      --border-radius: 12px;
+      --preview-height: min(25vh, 300px);
+      --transition: all 0.2s ease-in-out;
+    }
+    
+    * {
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: var(--padding);
+      padding-bottom: 0;
+      margin: 0;
+      min-width: 280px;
+      max-width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-y: auto;
+    }
+    
+    .controls {
+      margin-bottom: calc(var(--padding) + 80px);
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: var(--padding);
+    }
+    
+    .preview-container {
+      width: 100%;
+      height: var(--preview-height);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg-secondary);
+      min-height: 200px;
+      max-height: 300px;
+    }
+    
+    #preview {
+      width: 100%;
+      height: 100%;
+      max-width: min(100%, 400px);
+      max-height: min(100%, 400px);
+      animation: 
+        blobFloat 8s ease-in-out infinite,
+        blobPulse 4s ease-in-out infinite alternate;
+    }
+    
+    .slider-container,
+    .color-container,
+    .style-container,
+    .history-container {
+      margin-bottom: 0.75rem;
+      background: var(--bg-secondary);
+      padding: 0.75rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+    }
+    
+    .color-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .color-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .color-picker label {
+      margin-bottom: 0;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    
+    input[type="color"] {
+      -webkit-appearance: none;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+    
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+      border-radius: 50%;
+    }
+    
+    input[type="color"]::-webkit-color-swatch {
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      padding: 0;
+    }
+
+    input[type="color"]:hover {
+      transform: scale(1.05);
+      border-color: var(--accent-color);
+    }
+    
+    .fill-type {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .fill-type button {
+      flex: 1;
+      min-width: calc(50% - 0.5rem);
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      padding: 0.4rem;
+      min-height: 36px;
+      font-size: clamp(12px, 2vw, 14px);
+      white-space: nowrap;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .fill-type button:hover {
+      background: var(--bg-tertiary);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .fill-type button.active {
+      background: var(--accent-color);
+      color: #000000;
+      border: none;
+      font-weight: 500;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      font-size: clamp(14px, 2.5vw, 16px);
+      font-weight: 500;
+    }
+    
+    .label-with-value {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .value-display {
+      font-size: clamp(11px, 1.8vw, 13px);
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      margin: 0.5rem 0;
+      height: 2px;
+      -webkit-appearance: none;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 1px 4px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+      margin-top: -5px;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+    }
+
+    input[type="range"]:focus {
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 2px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      border: none;
+    }
+
+    input[type="range"]:hover::-webkit-slider-runnable-track {
+      background: var(--border-color);
+    }
+
+    .buttons-container {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.75rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--padding);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--bg-primary) 20%
+      );
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    
+    button {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+      padding: clamp(6px, 1.5vh, 10px) clamp(12px, 3vw, 20px);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: clamp(12px, 2vw, 14px);
+      white-space: nowrap;
+      min-height: 36px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    button:hover {
+      background: var(--bg-tertiary);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    #create {
+      background: var(--accent-color);
+      border: none;
+      color: #000000;
+      font-weight: 600;
+      border-radius: 100px;
+    }
+    
+    #create:hover {
+      filter: brightness(1.1);
+    }
+    
+    #randomize {
+      background: var(--bg-secondary);
+      padding: clamp(6px, 1.5vh, 10px);
+      aspect-ratio: 1;
+      width: clamp(36px, 8vw, 44px);
+      border-radius: 100px;
+    }
+    
+    #randomize svg {
+      width: clamp(20px, 4vw, 24px);
+      height: clamp(20px, 4vw, 24px);
+    }
+    
+    @media (max-height: 500px) {
+      :root {
+        --preview-height: 15vh;
+      }
+      
+      .preview-container {
+        margin-bottom: 0.75rem;
+        min-height: 120px;
+      }
+      
+      .slider-container {
+        margin-bottom: 0.75rem;
+      }
+      
+      .buttons-container {
+        margin-top: 0.75rem;
+      }
+    }
+    
+    @media (max-width: 320px) {
+      body {
+        padding: 12px;
+      }
+      
+      button {
+        padding: 8px 12px;
+      }
+      
+      #randomize {
+        width: 40px;
+      }
+    }
+    
+    .style-options {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .style-options button {
+      flex: 1;
+      min-width: calc(50% - 0.5rem);
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      padding: 0.4rem;
+      min-height: 36px;
+      font-size: clamp(12px, 2vw, 14px);
+      white-space: nowrap;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .style-options button:hover {
+      background: var(--bg-tertiary);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .style-options button.active {
+      background: var(--accent-color);
+      color: #000000;
+      border: none;
+      font-weight: 500;
+    }
+
+    @keyframes morphBlob {
+      0% {
+        d: path(var(--previous-path));
+        transform: scale(0.97) rotate(-2deg);
+        filter: blur(0.8px);
+      }
+      25% {
+        transform: scale(1.01) rotate(-0.5deg);
+        filter: blur(0.4px);
+      }
+      75% {
+        transform: scale(1.02) rotate(1.5deg);
+        filter: blur(0.2px);
+      }
+      100% {
+        d: path(var(--current-path));
+        transform: scale(1) rotate(0deg);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes blobFloat {
+      0% {
+        transform: translateY(0) scale(1);
+      }
+      25% {
+        transform: translateY(-3px) scale(1.01);
+      }
+      50% {
+        transform: translateY(-1px) scale(1.008);
+      }
+      75% {
+        transform: translateY(-4px) scale(1.005);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes blobPulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.008);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    #blobPath {
+      animation: 
+        morphBlob 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform-origin: center;
+      will-change: d, transform;
+      transition: all 0.3s ease-out;
+    }
+
+    #blobShine {
+      animation: shineMove 8s ease-in-out infinite;
+      opacity: 0.2;
+      mix-blend-mode: soft-light;
+    }
+
+    @keyframes shineMove {
+      0% {
+        transform: translate(-5%, -5%) scale(1.1);
+        opacity: 0.1;
+      }
+      50% {
+        transform: translate(5%, 5%) scale(1.2);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translate(-5%, -5%) scale(1.1);
+        opacity: 0.1;
+      }
+    }
+
+    .color-transition {
+      transition: 
+        fill 1.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        stop-color 1.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        filter 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      mix-blend-mode: screen;
+    }
+
+    .history-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-color) var(--bg-tertiary);
+      margin: 0 -0.75rem;
+    }
+    
+    .history-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .history-item {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      padding: 0.35rem;
+      transition: all 0.3s ease;
+      background: var(--bg-tertiary);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .history-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-color);
+    }
+    
+    .history-item.active {
+      border-color: var(--accent-color);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    
+    .history-actions {
+      display: flex;
+      gap: 0.35rem;
+    }
+    
+    .history-actions button {
+      padding: 0.25rem 0.75rem;
+      min-height: 24px;
+      font-size: 0.75em;
+      display: flex;
+      align-items: center;
+    }
+
+    .history-container {
+      margin-bottom: 0.75rem;
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+    }
+
+    .last-blob-preview {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg-tertiary);
+      border-radius: var(--border-radius);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease-out;
+      border: 1px solid var(--border-color);
+    }
+    
+    .last-blob-preview svg {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+      border: 2px solid var(--border-color);
+    }
+    
+    .last-blob-info {
+      flex: 1;
+    }
+    
+    .last-blob-info h3 {
+      margin: 0;
+      font-size: 1em;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .last-blob-info p {
+      margin: 0;
+      font-size: 0.9em;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .last-blob-info p span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .last-blob-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .last-blob-actions button {
+      padding: 0.5rem;
+      min-height: auto;
+      background: var(--bg-secondary);
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .last-blob-actions button:hover {
+      background: var(--accent-color);
+      color: #000000;
+    }
+
+    .style-container {
+      margin-bottom: 0.75rem;
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+    }
+
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    #randomize .material-symbols-rounded {
+      font-size: 24px;
+    }
+
+    .last-blob-info .material-symbols-rounded {
+      font-size: 16px;
+      margin-right: 4px;
+    }
+
+    .last-blob-actions .material-symbols-rounded {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <svg id="preview" viewBox="-150 -150 300 300">
+      <defs>
+        <linearGradient id="blobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" class="color-transition" style="stop-color:#2A2A2A"/>
+          <stop offset="50%" class="color-transition" style="stop-color:#3A3A3A"/>
+          <stop offset="100%" class="color-transition" style="stop-color:#4A4A4A"/>
+        </linearGradient>
+
+        <!-- Gradiente para brilho aprimorado -->
+        <radialGradient id="shine" cx="30%" cy="30%" r="70%" fx="30%" fy="30%">
+          <stop offset="0%" style="stop-color:white;stop-opacity:0.1"/>
+          <stop offset="50%" style="stop-color:white;stop-opacity:0.05"/>
+          <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+        </radialGradient>
+
+        <!-- Filtro para efeito 3D suave -->
+        <filter id="depth3D">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="0"/>
+          <feOffset dx="0" dy="0" result="offsetblur"/>
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0"/>
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      
+      <g>
+        <!-- Camada base -->
+        <path id="blobPath" class="color-transition" 
+              fill="url(#blobGradient)" 
+              filter="url(#depth3D)"
+              stroke="rgba(255,255,255,0.1)" 
+              stroke-width="0.5"/>
+        
+        <!-- Camada de brilho -->
+        <path id="blobShine" class="color-transition" 
+              fill="url(#shine)" 
+              style="mix-blend-mode: soft-light"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="controls">
+      <div class="history-container">
+        <div class="history-header">
+          <label>History</label>
+          <div class="history-actions">
+            <button id="clearHistory" title="Clear History">Clear</button>
+          </div>
+        </div>
+        <div class="history-scroll" id="historyContainer"></div>
+        <div id="lastBlobPreview" class="last-blob-preview"></div>
+      </div>
+
+      <div class="style-container">
+        <label>Blob Style</label>
+        <div class="style-options">
+          <button id="styleOrganic" class="active">Organic</button>
+          <button id="styleSmooth">Smooth</button>
+          <button id="styleSpiky">Spiky</button>
+          <button id="styleBubbly">Bubbly</button>
+          <button id="styleGeometric">Geometric</button>
+          <button id="styleCloud">Cloud</button>
+          <button id="styleSplash">Splash</button>
+          <button id="styleNoise">Noise</button>
+          <button id="styleCrystal">Crystal</button>
+          <button id="styleLiquid">Liquid</button>
+        </div>
+      </div>
+
+      <div class="color-container">
+        <label>Fill</label>
+        <div class="fill-type">
+          <button id="fillSolid" class="active">Solid</button>
+          <button id="fillGradient">Gradient</button>
+        </div>
+        <div class="color-options">
+          <div class="color-picker">
+            <input type="color" id="colorPrimary" value="#C4C4C4">
+            <label>Primary Color</label>
+          </div>
+          <div class="color-picker" id="gradientColorPicker" style="display: none;">
+            <input type="color" id="colorSecondary" value="#808080">
+            <label>Secondary Color</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-container">
+        <div class="label-with-value">
+          <label for="complexity">Variation</label>
+          <span class="value-display" id="complexityValue">200 points</span>
+        </div>
+        <input type="range" id="complexity" min="0" max="1" step="0.125" value="1">
+      </div>
+      
+      <div class="slider-container">
+        <div class="label-with-value">
+          <label for="uniqueness">Ripple</label>
+          <span class="value-display" id="uniquenessValue">85%</span>
+        </div>
+        <input type="range" id="uniqueness" min="0" max="1" step="0.05" value="0.85">
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons-container">
+    <button id="create">Create Blob</button>
+    <button id="randomize" title="Generate Random">
+      <span class="material-symbols-rounded">shuffle</span>
+    </button>
+  </div>
+
+  <script>
+    let debounceTimeout;
+    let fillType = 'solid';
+    let blobStyle = 'organic';
+    let previousPath = '';
+    let blobHistory = [];
+    const MAX_HISTORY = 10;
+    
+    let autoSaveTimeout;
+    const AUTO_SAVE_DELAY = 1000; // 1 segundo
+    let lastSavedState = null;
+    
+    function getCurrentBlobState() {
+      const blobPath = document.getElementById('blobPath');
+      const gradient = document.getElementById('blobGradient');
+      
+      return {
+        path: blobPath.getAttribute('d'),
+        style: blobStyle,
+        fillType: fillType,
+        colorPrimary: document.getElementById('colorPrimary').value,
+        colorSecondary: document.getElementById('colorSecondary').value,
+        complexity: document.getElementById('complexity').value,
+        uniqueness: document.getElementById('uniqueness').value,
+        gradientColors: fillType === 'gradient' ? {
+          stop1: gradient.querySelector('stop:nth-child(1)').style.stopColor,
+          stop2: gradient.querySelector('stop:nth-child(2)').style.stopColor,
+          stop3: gradient.querySelector('stop:nth-child(3)').style.stopColor,
+          stop4: gradient.querySelector('stop:nth-child(4)').style.stopColor,
+          stop5: gradient.querySelector('stop:nth-child(5)').style.stopColor
+        } : null
+      };
+    }
+
+    function statesAreEqual(state1, state2) {
+      if (!state1 || !state2) return false;
+      return (
+        state1.path === state2.path &&
+        state1.style === state2.style &&
+        state1.fillType === state2.fillType &&
+        state1.colorPrimary === state2.colorPrimary &&
+        state1.colorSecondary === state2.colorSecondary &&
+        state1.complexity === state2.complexity &&
+        state1.uniqueness === state2.uniqueness
+      );
+    }
+
+    function autoSaveBlob() {
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(() => {
+        const currentState = getCurrentBlobState();
+        if (!statesAreEqual(currentState, lastSavedState)) {
+          blobHistory.unshift(currentState);
+          if (blobHistory.length > MAX_HISTORY) {
+            blobHistory.pop();
+          }
+          lastSavedState = currentState;
+          updateHistoryUI();
+          localStorage.setItem('blobHistory', JSON.stringify(blobHistory));
+        }
+      }, AUTO_SAVE_DELAY);
+    }
+
+    function updatePreview() {
+      const complexity = document.getElementById('complexity').value;
+      const uniqueness = document.getElementById('uniqueness').value;
+      const colorPrimary = document.getElementById('colorPrimary').value;
+      const colorSecondary = document.getElementById('colorSecondary').value;
+      
+      // Atualiza os displays
+      const numPoints = 12 + Math.floor(complexity * 96);
+      document.getElementById('complexityValue').textContent = numPoints + ' points';
+      document.getElementById('uniquenessValue').textContent = Math.round(uniqueness * 100) + '%';
+      
+      // Atualiza as cores e efeitos do preview
+      const blobPath = document.getElementById('blobPath');
+      const blobShine = document.getElementById('blobShine');
+      
+      if (fillType === 'solid') {
+        blobPath.setAttribute('fill', colorPrimary);
+      } else {
+        const gradient = document.getElementById('blobGradient');
+        gradient.querySelector('stop:nth-child(1)').style.stopColor = colorPrimary;
+        gradient.querySelector('stop:nth-child(2)').style.stopColor = colorPrimary;
+        gradient.querySelector('stop:nth-child(3)').style.stopColor = 
+          blendColors(colorPrimary, colorSecondary, 0.5);
+        gradient.querySelector('stop:nth-child(4)').style.stopColor = colorSecondary;
+        gradient.querySelector('stop:nth-child(5)').style.stopColor = colorSecondary;
+        blobPath.setAttribute('fill', 'url(#blobGradient)');
+      }
+      
+      // Copia o path para as camadas de efeito
+      const currentPath = blobPath.getAttribute('d');
+      blobShine.setAttribute('d', currentPath);
+      
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'update-preview',
+            complexity: parseFloat(complexity),
+            uniqueness: parseFloat(uniqueness),
+            colorPrimary,
+            colorSecondary,
+            fillType,
+            blobStyle
+          }
+        }, '*');
+      }, 100);
+      
+      // Adiciona auto-save após cada atualização
+      autoSaveBlob();
+    }
+
+    function randomize() {
+      // Gera valores aleatórios com tendência para mais complexidade
+      const complexity = 0.5 + Math.random() * 0.5; // Entre 50% e 100%
+      const uniqueness = 0.7 + Math.random() * 0.3; // Entre 70% e 100%
+      
+      // Atualiza os sliders
+      document.getElementById('complexity').value = complexity;
+      document.getElementById('uniqueness').value = uniqueness;
+      
+      // Atualiza o preview
+      updatePreview();
+    }
+    
+    document.getElementById('complexity').addEventListener('input', updatePreview);
+    document.getElementById('uniqueness').addEventListener('input', updatePreview);
+    document.getElementById('randomize').addEventListener('click', randomize);
+    
+    document.getElementById('create').addEventListener('click', () => {
+      const complexity = document.getElementById('complexity').value;
+      const uniqueness = document.getElementById('uniqueness').value;
+      const colorPrimary = document.getElementById('colorPrimary').value;
+      const colorSecondary = document.getElementById('colorSecondary').value;
+      
+      parent.postMessage({
+        pluginMessage: {
+          type: 'create-blob',
+          complexity: parseFloat(complexity),
+          uniqueness: parseFloat(uniqueness),
+          colorPrimary,
+          colorSecondary,
+          fillType,
+          blobStyle
+        }
+      }, '*');
+
+      // Salva no histórico após criar
+      setTimeout(saveBlobToHistory, 100);
+    });
+
+    // Adiciona listeners para os controles de cor
+    document.getElementById('fillSolid').addEventListener('click', () => {
+      fillType = 'solid';
+      document.getElementById('gradientColorPicker').style.display = 'none';
+      document.getElementById('fillSolid').classList.add('active');
+      document.getElementById('fillGradient').classList.remove('active');
+      updatePreview();
+    });
+
+    document.getElementById('fillGradient').addEventListener('click', () => {
+      fillType = 'gradient';
+      document.getElementById('gradientColorPicker').style.display = 'flex';
+      document.getElementById('fillGradient').classList.add('active');
+      document.getElementById('fillSolid').classList.remove('active');
+      updatePreview();
+    });
+
+    document.getElementById('colorPrimary').addEventListener('input', updatePreview);
+    document.getElementById('colorSecondary').addEventListener('input', updatePreview);
+
+    // Atualiza os listeners dos estilos
+    const styleButtons = ['Organic', 'Smooth', 'Spiky', 'Bubbly', 'Geometric', 'Cloud', 'Splash', 'Noise', 'Crystal', 'Liquid'];
+    
+    styleButtons.forEach(style => {
+      document.getElementById(`style${style}`).addEventListener('click', () => {
+        blobStyle = style.toLowerCase();
+        styleButtons.forEach(s => {
+          document.getElementById(`style${s}`).classList.remove('active');
+        });
+        document.getElementById(`style${style}`).classList.add('active');
+        updatePreview();
+      });
+    });
+
+    // Atualiza o preview inicial
+    updatePreview();
+
+    // Recebe atualizações do plugin
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'preview-update') {
+        const blobPath = document.getElementById('blobPath');
+        const currentPath = blobPath.getAttribute('d') || '';
+        
+        document.documentElement.style.setProperty('--previous-path', `"${currentPath}"`);
+        document.documentElement.style.setProperty('--current-path', `"${msg.path}"`);
+        
+        blobPath.style.animation = 'none';
+        blobPath.offsetHeight;
+        blobPath.style.animation = 'morphBlob 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, blobGlow 6s ease-in-out infinite';
+        
+        blobPath.setAttribute('d', msg.path);
+      }
+    };
+
+    // Atualiza a animação do preview
+    const preview = document.getElementById('preview');
+    preview.style.animation = 'blobFloat 8s ease-in-out infinite, blobPulse 4s ease-in-out infinite alternate';
+
+    function showLastBlobPreview(blob) {
+      const lastBlobPreview = document.getElementById('lastBlobPreview');
+      lastBlobPreview.innerHTML = `
+        <svg viewBox="-80 -80 160 160">
+          <defs>
+            <linearGradient id="lastBlobGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              ${blob.fillType === 'gradient' && blob.gradientColors ? `
+                <stop offset="0%" style="stop-color:${blob.gradientColors.stop1}"/>
+                <stop offset="25%" style="stop-color:${blob.gradientColors.stop2}"/>
+                <stop offset="50%" style="stop-color:${blob.gradientColors.stop3}"/>
+                <stop offset="75%" style="stop-color:${blob.gradientColors.stop4}"/>
+                <stop offset="100%" style="stop-color:${blob.gradientColors.stop5}"/>
+              ` : `
+                <stop offset="0%" style="stop-color:${blob.colorPrimary}"/>
+                <stop offset="100%" style="stop-color:${blob.colorSecondary}"/>
+              `}
+            </linearGradient>
+          </defs>
+          <path d="${blob.path}" fill="${blob.fillType === 'solid' ? blob.colorPrimary : 'url(#lastBlobGradient)'}"/>
+        </svg>
+        <div class="last-blob-info">
+          <h3>Last Created Blob</h3>
+          <p>
+            <span>
+              <span class="material-symbols-rounded">style</span>
+              Style: ${blob.style.charAt(0).toUpperCase() + blob.style.slice(1)}
+            </span>
+            <span>
+              <span class="material-symbols-rounded">tune</span>
+              Variation: ${Math.round(blob.complexity * 100)}%
+            </span>
+          </p>
+        </div>
+        <div class="last-blob-actions">
+          <button onclick="loadBlobFromHistory(0)" title="Restore">
+            <span class="material-symbols-rounded">restore</span>
+          </button>
+        </div>
+      `;
+      lastBlobPreview.classList.add('visible');
+    }
+    
+    function saveBlobToHistory() {
+      const currentState = getCurrentBlobState();
+      if (!statesAreEqual(currentState, lastSavedState)) {
+        blobHistory.unshift(currentState);
+        if (blobHistory.length > MAX_HISTORY) {
+          blobHistory.pop();
+        }
+        lastSavedState = { ...currentState };
+        updateHistoryUI();
+        localStorage.setItem('blobHistory', JSON.stringify(blobHistory));
+        showLastBlobPreview(currentState);
+      }
+    }
+
+    function loadBlobFromHistory(index) {
+      const blob = blobHistory[index];
+      if (!blob) return;
+
+      // Restaura os valores
+      blobStyle = blob.style;
+      fillType = blob.fillType;
+      document.getElementById('colorPrimary').value = blob.colorPrimary;
+      document.getElementById('colorSecondary').value = blob.colorSecondary;
+      document.getElementById('complexity').value = blob.complexity;
+      document.getElementById('uniqueness').value = blob.uniqueness;
+
+      // Atualiza a UI
+      styleButtons.forEach(s => {
+        document.getElementById(`style${s}`).classList.toggle('active', s.toLowerCase() === blob.style);
+      });
+
+      document.getElementById('fillSolid').classList.toggle('active', blob.fillType === 'solid');
+      document.getElementById('fillGradient').classList.toggle('active', blob.fillType === 'gradient');
+      document.getElementById('gradientColorPicker').style.display = blob.fillType === 'gradient' ? 'flex' : 'none';
+
+      // Restaura o gradiente se existir
+      if (blob.fillType === 'gradient' && blob.gradientColors) {
+        const gradient = document.getElementById('blobGradient');
+        gradient.querySelector('stop:nth-child(1)').style.stopColor = blob.gradientColors.stop1;
+        gradient.querySelector('stop:nth-child(2)').style.stopColor = blob.gradientColors.stop2;
+        gradient.querySelector('stop:nth-child(3)').style.stopColor = blob.gradientColors.stop3;
+        gradient.querySelector('stop:nth-child(4)').style.stopColor = blob.gradientColors.stop4;
+        gradient.querySelector('stop:nth-child(5)').style.stopColor = blob.gradientColors.stop5;
+      }
+
+      // Atualiza o preview
+      const blobPath = document.getElementById('blobPath');
+      blobPath.setAttribute('d', blob.path);
+
+      updatePreview();
+      showLastBlobPreview(blob);
+    }
+
+    function updateHistoryUI() {
+      const container = document.getElementById('historyContainer');
+      container.innerHTML = '';
+
+      blobHistory.forEach((blob, index) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        if (index === 0) item.classList.add('active');
+        
+        item.innerHTML = `
+          <svg viewBox="-80 -80 160 160" width="100%" height="100%">
+            <defs>
+              <linearGradient id="historyGradient${index}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:${blob.colorPrimary}"/>
+                <stop offset="100%" style="stop-color:${blob.colorSecondary}"/>
+              </linearGradient>
+            </defs>
+            <path d="${blob.path}" fill="${blob.fillType === 'solid' ? blob.colorPrimary : `url(#historyGradient${index})`}"/>
+          </svg>
+        `;
+        
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.history-item').forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+          loadBlobFromHistory(index);
+        });
+        
+        container.appendChild(item);
+      });
+    }
+
+    // Carrega o histórico ao iniciar
+    try {
+      const savedHistory = localStorage.getItem('blobHistory');
+      if (savedHistory) {
+        blobHistory = JSON.parse(savedHistory);
+        if (blobHistory.length > 0) {
+          lastSavedState = { ...blobHistory[0] };
+          loadBlobFromHistory(0);
+        }
+        updateHistoryUI();
+      }
+    } catch (e) {
+      console.error('Erro ao carregar histórico:', e);
+      blobHistory = [];
+      lastSavedState = null;
+    }
+
+    // Adiciona o listener para o botão de limpar histórico
+    document.getElementById('clearHistory').addEventListener('click', () => {
+      blobHistory = [];
+      lastSavedState = null;
+      updateHistoryUI();
+      localStorage.removeItem('blobHistory');
+      const lastBlobPreview = document.getElementById('lastBlobPreview');
+      lastBlobPreview.innerHTML = '';
+      lastBlobPreview.classList.remove('visible');
+    });
+
+    // Função auxiliar para misturar cores
+    function blendColors(color1, color2, ratio) {
+      const hex1 = color1.replace('#', '');
+      const hex2 = color2.replace('#', '');
+      
+      const r1 = parseInt(hex1.substr(0, 2), 16);
+      const g1 = parseInt(hex1.substr(2, 2), 16);
+      const b1 = parseInt(hex1.substr(4, 2), 16);
+      
+      const r2 = parseInt(hex2.substr(0, 2), 16);
+      const g2 = parseInt(hex2.substr(2, 2), 16);
+      const b2 = parseInt(hex2.substr(4, 2), 16);
+      
+      const r = Math.round(r1 * (1 - ratio) + r2 * ratio);
+      const g = Math.round(g1 * (1 - ratio) + g2 * ratio);
+      const b = Math.round(b1 * (1 - ratio) + b2 * ratio);
+      
+      return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>
