@@ -68,7 +68,7 @@ Centaury Contents is an innovative open-source Figma plugin that revolutionizes 
 
 1. **Prerequisites**
    - Node.js (v14 or higher)
-   - Yarn or npm
+   - npm
    - Figma Desktop App
 
 2. **Installation**
@@ -78,19 +78,16 @@ Centaury Contents is an innovative open-source Figma plugin that revolutionizes 
    cd centaury-contents
 
    # Install dependencies
-   yarn install
+   npm install
 
-   # Start development server
-   yarn dev
+   # Start development build
+   npm run dev
    ```
 
 3. **Development**
    ```bash
-   # Run tests
-   yarn test
-
    # Build for production
-   yarn build
+   npm run build
    ```
 
 ## 🔧 Project Structure
