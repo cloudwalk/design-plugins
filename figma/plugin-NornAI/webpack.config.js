@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const path = require('path');
+const InlineScriptsWebpackPlugin = require('../shared/webpack/InlineScriptsWebpackPlugin');
 
 module.exports = (env, argv) => ({
   mode: argv.mode === 'production' ? 'production' : 'development',
@@ -103,7 +103,9 @@ module.exports = (env, argv) => ({
         collapseWhitespace: true
       } : false
     }),
-    // Inline do script na página HTML
-    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/ui/])
+    new InlineScriptsWebpackPlugin({
+      htmlWebpackPlugin: HtmlWebpackPlugin,
+      tests: [/^ui\.js$/]
+    })
   ],
 });

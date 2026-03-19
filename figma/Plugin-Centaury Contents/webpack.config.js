@@ -1,8 +1,7 @@
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+const InlineScriptsWebpackPlugin = require('../shared/webpack/InlineScriptsWebpackPlugin');
 
 module.exports = (env, argv) => ({
   mode: argv.mode === 'production' ? 'production' : 'development',
@@ -77,11 +76,9 @@ module.exports = (env, argv) => ({
       cache: false,
       inject: 'body',
     }),
-    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/ui/]),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'assets', to: 'assets' }
-      ],
+    new InlineScriptsWebpackPlugin({
+      htmlWebpackPlugin: HtmlWebpackPlugin,
+      tests: [/^ui\.js$/],
     }),
   ],
 });
