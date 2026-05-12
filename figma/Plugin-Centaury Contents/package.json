@@ -11,26 +11,26 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "@figma/plugin-typings": "*",
-    "@types/figma": "^1.0.8",
-    "@types/node": "^16.7.1",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
-    "autoprefixer": "^10.4.20",
-    "css-loader": "^6.10.0",
-    "html-webpack-plugin": "^5.6.0",
-    "postcss": "^8.4.35",
-    "postcss-loader": "^8.1.0",
-    "style-loader": "^3.3.4",
-    "tailwindcss": "^3.4.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.105.4",
-    "webpack-cli": "^5.1.4"
+    "@figma/plugin-typings": "1.123.0",
+    "@types/figma": "1.0.8",
+    "@types/node": "16.18.126",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "autoprefixer": "10.4.27",
+    "css-loader": "6.11.0",
+    "html-webpack-plugin": "5.6.6",
+    "postcss": "8.5.8",
+    "postcss-loader": "8.2.1",
+    "style-loader": "3.3.4",
+    "tailwindcss": "3.4.19",
+    "ts-loader": "9.5.4",
+    "typescript": "5.9.3",
+    "url-loader": "4.1.1",
+    "webpack": "5.105.4",
+    "webpack-cli": "5.1.4"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }
